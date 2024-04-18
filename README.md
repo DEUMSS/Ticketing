@@ -1,0 +1,2 @@
+MY BLANK MVC PROJECT
+=====================
