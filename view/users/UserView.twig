@@ -1,0 +1,15 @@
+{% extends 'Pagelayout.twig' %}
+
+{%  block body %}
+
+    <p>{{ message }}</p>
+
+    {% if user is defined %}
+        <h2>Utilisateur {{ user.login }}</h2>
+
+        <p>Login : {{ user.login }}</p>
+        <p>Mot de passe : {{ user.password }}</p>
+
+    {% endif %}
+
+{%  endblock %}

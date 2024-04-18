@@ -1,0 +1,30 @@
+{% extends 'Pagelayout.twig' %}
+
+{%  block body %}
+
+<div class="row justify-content-center">
+  <h2>Mise à jour de votre profil</h2>
+</div>
+
+<div class="row">
+    <p class="col-12">Bonjour {{ user.login }}. Merci de compléter votre profil : </p>
+</div>
+
+<div class="row justify-content-center mt-3">
+    <form class="col-6" action="{{ pathRoot ~ 'users/updateprofil' }}" name="updateprofilForm" method="post">
+        <input type="hidden" value="{{ user.getId }}" name="id">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Nom" name="name" required>
+        </div>
+
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Prénom" name="surname" required>
+        </div>
+
+        <div class="input-group justify-content-end">
+            <button type="submit" class="btn btn-primary" name="ValidProfilUpdate">Valider</button>
+        </div>
+    </form>
+</div>
+
+{%  endblock %}
