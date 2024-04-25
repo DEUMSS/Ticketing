@@ -1,10 +1,10 @@
 <?php
+session_start();
 ini_set('display_errors', 1);
 
 define( 'ROOT', dirname( __DIR__ ) );
 require_once ROOT . '/autoload.php';
 require_once ROOT . '/vendor/autoload.php';
-session_start();
 
 $data = json_decode(file_get_contents('php://input'), true);
 $isFetched = false;
@@ -16,10 +16,10 @@ if( $data !== null ) {
 }
 
 // App name witch set in namespaces
-$appName = 'projetVierge';
+$appName = 'Ticketing';
 
-
-$queryString = rtrim( $_SERVER['REDIRECT_QUERY_STRING'], '/' );
+$queryServer = isset($_SERVER['REDIRECT_QUERY_STRING']) ? $_SERVER['REDIRECT_QUERY_STRING'] : '';
+$queryString = rtrim( $queryServer, '/' );
 
 
 $nbRequest = 0;

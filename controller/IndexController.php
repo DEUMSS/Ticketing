@@ -1,6 +1,6 @@
 <?php
 
-namespace ticketing\controller;
+namespace Ticketing\controller;
 
 /**
  * Default base class for compiled templates.
@@ -22,9 +22,7 @@ class IndexController extends Controller
      */
     public function defaultAction()
     {
-        $data = [
-            "message"   => "bienvenue sur mon projet MVC vierge."
-        ];
+        $data=[];
         $this->render( 'index', $data );
     }
 

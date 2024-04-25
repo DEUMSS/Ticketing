@@ -1,0 +1,48 @@
+{% extends 'Pagelayout.twig' %}
+
+{%  block body %}
+
+<div class="row justify-content-center">
+  <h2>Création d'un utilisateur</h2>
+</div>
+
+{% if message is defined %}
+    <div class="row">
+        <div class="col-6">
+            <div class="p-3 text-warning-emphasis bg-warning-subtle border border-warning-subtle rounded-3">
+                {{ message }}
+            </div>
+        </div>
+    </div>
+{% endif %}
+    
+
+<div class="row justify-content-center mt-3">
+    <form class="col-6" action="{{ pathRoot ~ 'client/validclient' }}" name="createForm" method="post">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Prenom" name="prenom" required>
+        </div>
+
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Nom" name="nom" required>
+        </div>
+
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Entreprise" name="entreprise" required>
+        </div>
+
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Login" name="login" required>
+        </div>
+
+        <div class="input-group mb-3">
+            <input type="password" class="form-control" placeholder="Password" name="password" required>
+        </div>
+
+        <div class="input-group justify-content-end">
+            <button type="submit" class="btn btn-primary" name="ValidUser">Valider</button>
+        </div>
+    </form>
+</div>
+
+{%  endblock %}

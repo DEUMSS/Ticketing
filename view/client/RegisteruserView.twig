@@ -1,0 +1,39 @@
+{% extends 'Pagelayout.twig' %}
+
+{%  block body %}
+
+<div class="row justify-content-center">
+  <h2>Connexion</h2>
+</div>
+
+{% if message is defined %}
+    {% if resultat == true %}
+        <div class="row">
+            <div class="col-6">
+                <div class="p-3 text-success-emphasis bg-success-subtle border border-success-subtle rounded-3">
+                    {{ message }}
+                </div>
+            </div>
+        </div>
+    {% elseif resultat == false %}
+        <div class="row">
+            <div class="col-6">
+                <div class="p-3 text-warning-emphasis bg-warning-subtle border border-warning-subtle rounded-3">
+                    {{ message }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endif %}
+    
+
+<div class="row justify-content-center mt-3">
+    <form class="col-6" action="{{ pathRoot ~ 'user/requestuser' }}" name="connectForm" method="post">
+        <h4 class="">En cliquant sur le boutton valider, vous enverez une demande à l'administrateur pour devenir un membre de notre équipe !</h4>
+        <div class="input-group justify-content-center mt-5">
+            <button type="submit" class="btn btn-primary" name="ValidUser">Valider</button>
+        </div>
+    </form>
+</div>
+
+{%  endblock %}

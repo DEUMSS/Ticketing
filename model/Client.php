@@ -3,21 +3,21 @@
  * Entity  Users Table
  */
 
-namespace ticketing\model;
+namespace Ticketing\model;
 
 use \DateTimeImmutable;
 use \ReflectionMethod;
 
 class Client
 {
-    protected int $CI_id;
-    protected string $CI_login;
-    protected string $CI_mdp;
-    protected bool $CI_actif = false;
-    protected string $CI_nom;
-    protected string $CI_prenom;
-    protected string $CI_entreprise;
-	protected ?\DateTimeImmutable $CI_dateCrea = null;
+    protected $CI_id;
+    protected $CI_login;
+    protected $CI_password;
+    protected $CI_actif = false;
+    protected $CI_nom;
+    protected $CI_prenom;
+    protected $CI_entreprise;
+	protected $CI_dateCrea = null;
 
 
     public function __construct( array $data )
@@ -26,11 +26,7 @@ class Client
     }
 
 
-    /**
-     * Fill each property with the values present in $data
-     *
-     * @param array $data
-     */
+
     public function hydrate( array $data )
     {
         foreach ( $data as $key=>$value ) {
@@ -51,69 +47,69 @@ class Client
 
 
     // Setters
-    public function setId( $id )
+    public function setCI_id( $id )
     {
         $this->CI_id = $id;
     }
-    public function setLogin( $login )
+    public function setCI_login( $login )
     {
         $this->CI_login = $login;
     }
-    public function setPassword( $mdp )
+    public function setCI_password( $mdp )
     {
-        $this->CI_mdp = $mdp;
+        $this->CI_password = $mdp;
     }
-    public function setActif( $isactive )
+    public function setCI_actif( $isactive )
     {
         $this->CI_actif = $isactive;
     }
-    public function setNom( $nom )
+    public function setCI_nom( $nom )
     {
         $this->CI_nom = $nom;
     }
-    public function setPrenom( $prenom )
+    public function setCI_prenom( $prenom )
     {
         $this->CI_prenom = $prenom;
     }
-	public function setDateCrea( ?\DateTimeImmutable $dateCrea )
+	public function setCI_dateCrea( ?\DateTimeImmutable $dateCrea )
 	{
 		$this->CI_dateCrea = $dateCrea;
 	}
-    public function setEntreprise( $entreprise ){
+    public function setCI_entreprise( $entreprise ){
         $this->CI_entreprise = $entreprise;
     }
 
 
     // Getters
-    public function getId()
+    public function getCI_id()
     {
         return $this->CI_id;
     }
-    public function getLogin()
+    public function getCI_login()
     {
         return $this->CI_login;
     }
-    public function getPassword()
+    public function getCI_password()
     {
-        return $this->CI_mdp;
+        return $this->CI_password;
     }
-    public function getActif()
+    public function getCI_actif()
     {
         return $this->CI_actif;
     }
-    public function getNom()
+    public function getCI_nom()
     {
         return $this->CI_nom;
     }
-    public function getPrenom()
+    public function getCI_prenom()
     {
         return $this->CI_prenom;
     }
-    public function getDateCrea(): ?\DateTimeImmutable
+    public function getCI_dateCrea(): ?\DateTimeImmutable
 	{
 		return $this->CI_dateCrea;
 	}
-    public function getEntreprise(){
+    public function getCI_entreprise(){
         return $this->CI_entreprise;
     }
 

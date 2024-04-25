@@ -3,11 +3,22 @@
 {%  block body %}
 
 <div class="row justify-content-center">
-  <h2>Création d'un utilisateur</h2>
+  <h2>Connexion</h2>
 </div>
 
+{% if message is defined %}
+    <div class="row">
+        <div class="col-6">
+            <div class="p-3 text-warning-emphasis bg-warning-subtle border border-warning-subtle rounded-3">
+                {{ message }}
+            </div>
+        </div>
+    </div>
+{% endif %}
+    
+
 <div class="row justify-content-center mt-3">
-    <form class="col-6" action="{{ pathRoot ~ 'users/createuser' }}" name="createForm" method="post">
+    <form class="col-6" action="{{ pathRoot ~ 'client/connectclient' }}" name="connectForm" method="post">
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Login" name="login" required>
         </div>

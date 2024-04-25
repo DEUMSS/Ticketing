@@ -1,7 +1,15 @@
 {% extends 'Pagelayout.twig' %}
 
 {%  block body %}
-
-  <h2>{{ message }}</h2>
-
+  {% if resultat is defined %}
+    {% if resultat == false %}
+      <div class="row">
+        <div class="col-8">
+          <div class="p-3 text-danger-emphasis bg-danger-subtle border border-danger-subtle rounded-3">
+            {{ message }}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% endif %}
 {%  endblock %}

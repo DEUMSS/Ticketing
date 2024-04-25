@@ -1,6 +1,6 @@
 <?php
 
-namespace ticketing\controller;
+namespace Ticketing\controller;
 
 use Twig\Loader\FilesystemLoader;
 use Twig\Environment;
@@ -22,7 +22,8 @@ abstract class Controller
     {
         $this->setParams( $params );
 
-        $this->pathRoot = str_replace( $_SERVER['REDIRECT_QUERY_STRING'], '', $_SERVER['REDIRECT_URL'] );
+        $queryServer = isset($_SERVER['REDIRECT_QUERY_STRING']) ? $_SERVER['REDIRECT_QUERY_STRING'] : '';
+        $this->pathRoot = str_replace( $queryServer, '', $_SERVER['REDIRECT_URL'] );
 
         $this->pathView = dirname( __DIR__ ) . DIRECTORY_SEPARATOR . $this->pathView;
 
@@ -33,6 +34,8 @@ abstract class Controller
             'debug' => true
         ]);
         $this->twig->addGlobal('pathRoot', $this->pathRoot );
+        $this->twig->addGlobal('session', $_SESSION);
+        $this->twig->addGlobal('get', $_GET);
         $this->twig->addExtension(new DebugExtension());
 
         // Call action

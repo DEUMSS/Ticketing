@@ -1,21 +1,10 @@
 <?php
-/**
- * Entity manager Users Table
- */
 
-namespace ticketing\model;
+namespace Ticketing\model;
 
-/**
- *
- * This class is used to manage users
- *
- * @author Fred Fraticelli
- *
- */
-class UsersManager extends Manager
+
+class ClientManager extends Manager
 {
-    
-    private $_user;
 
     public function __construct()
     {
@@ -33,7 +22,7 @@ class UsersManager extends Manager
 
 
     
-    public function getAllUsers( array $params )
+    public function getAllClient( array $params )
     {
         $order = !empty( $params['order'] ) ? $params['order'] : 'ASC';
         $sort = !empty( $params['sort'] ) ? $params['sort'] : 'id';
@@ -69,19 +58,25 @@ class UsersManager extends Manager
      * @param int $id
      * @return false|Users
      */
-    public function getUser( int $id )
+    public function getClient( string $login )
     {
-        $sql = "SELECT * FROM users WHERE id=:id";
+        $sql = "SELECT * FROM client WHERE CI_login=:login";
         $req = $this->manager->db->prepare( $sql );
-        if( $res = $req->execute([':id'=>$id] ) ) {
-            $user = $req->fetch(\PDO::FETCH_ASSOC);
-            $this->_user = new Client( $user );
-            return $this->_user;
-        } else {
-            return false;
-        }
+        $req->execute([':login'=>$login] );
+        $data = $req->fetch(\PDO::FETCH_ASSOC);
+        $connectedClient = new Client( $data );
+        return $connectedClient;
     }
 
+    public function getClientById( int $idClient )
+    {
+        $sql = "SELECT * FROM client WHERE CI_id=:id";
+        $req = $this->manager->db->prepare( $sql );
+        $req->execute([':id'=>$idClient] );
+        $data = $req->fetch(\PDO::FETCH_ASSOC);
+        $connectedClient = new Client( $data );
+        return $connectedClient;
+    }
 
 
     /**
@@ -90,9 +85,9 @@ class UsersManager extends Manager
      * @param integer $id
      * @return integer
      */
-	public function deleteUser( int $id ): int
+	public function deleteClient( int $id ): int
 	{
-		$sql = "DELETE FROM users WHERE id=:id";
+		$sql = "DELETE FROM client WHERE id=:id";
 		$req = $this->manager->db->prepare( $sql );
 		$state = $req->execute([
 			':id'  => $id
@@ -101,17 +96,9 @@ class UsersManager extends Manager
 	}
 
 
-
-    /**
-     * Undocumented function
-     *
-     * @param integer $id
-     * @param integer $isActive
-     * @return boolean
-     */
-    public function setUser( int $id, int $isActive ): bool
+    public function setClient( int $id, int $isActive ): bool
     {
-        $sql = 'UPDATE users SET isActive=:isActive WHERE id=:id';
+        $sql = 'UPDATE client SET CI_actif=:isActive WHERE CI_id=:id';
         $req = $this->manager->db->prepare( $sql );
 		$state = $req->execute([
             ':isActive'     => $isActive,
@@ -120,9 +107,10 @@ class UsersManager extends Manager
         return $state;
     }
 
+    /*
     public function isUserAdmin(): bool
     {
-        $sql = 'SELECT id FROM users WHERE isAdmin=1';
+        $sql = 'SELECT CI_id FROM client WHERE isAdmin=1';
         $req = $this->manager->db->query( $sql );
 		if($id = current($req->fetch())){
             $sql = 'UPDATE users SET isAdmin=0 WHERE id=:id';
@@ -132,7 +120,8 @@ class UsersManager extends Manager
             ]);
         } else return true;
     }
-
+    */
+    /*
     public function setUserAdmin( int $id, int $isAdmin): bool
     {
         if(!$this->isUserAdmin()){
@@ -146,35 +135,51 @@ class UsersManager extends Manager
 		]);
         return $state;
     }
+    */
 
-    public function updateUser( Client $user ) : ?bool 
+    public function updateClient( Client $client ) : ?bool 
     {
-        $sql = "UPDATE users SET name=:name, surname=:surname WHERE id=:id";
+        $sql = "UPDATE client SET CI_nom=:nom, CI_prenom=:prenom, CI_entreprise=:entreprise, CI_dateCrea=:dateCrea, CI_actif=:actif WHERE CI_id=:id";
         $req = $this->manager->db->prepare( $sql );
         $state = $req->execute([
-            ':id'       => $user->getId(),
-            ':name'     => $user->getNom(),
-            ':surname'  => $user->getPrenom()
+            ':id'           => $client->getCI_id(),
+            ':nom'          => $client->getCI_nom(),
+            ':prenom'       => $client->getCI_prenom(),
+            ':entreprise'   => $client->getCI_entreprise(),
+            ':dateCrea'     => $client->getCI_dateCrea(),
+            ':actif'        => $client->getCI_actif()
         ]);
         return $state;
     }
 
+    public function isLoginUsed( String $login ){
+        $sql = "SELECT * FROM client WHERE CI_login=:login";
+        $req = $this->manager->db->prepare( $sql );
+        $req->execute([
+            ':login'    => $login,
+        ]);
+        $loginUsed = $req->fetch();
+        return $loginUsed;
+    }
 
 
-    public function addUser( Client $newUser )
+
+    public function addClient( Client $newClient )
     {
-        $sql = "INSERT INTO users(login, password) VALUES (:login, :password)";
+        $sql = "INSERT INTO client(CI_login, CI_password, CI_nom, CI_prenom, CI_entreprise, CI_dateCrea, CI_actif) VALUES (:login, :password, :nom, :prenom, :entreprise, :dateCrea, :actif)";
         $req = $this->manager->db->prepare( $sql );
         $state = $req->execute([
-            ':login'    => $newUser->getLogin(),
-            ':password' => $newUser->getPassword()
+            ':login'        => $newClient->getCI_login(),
+            ':password'     => $newClient->getCI_password(),
+            ':nom'          => $newClient->getCI_nom(),
+            ':prenom'       => $newClient->getCI_prenom(),
+            ':entreprise'   => $newClient->getCI_entreprise(),
+            ':dateCrea'     => $newClient->getCI_dateCrea()->format('Y-m-d'),
         ]);
         if( $state ) {
-            $newUser->setId( $this->manager->db->lastInsertId() );
+            $newClient->setCI_id( $this->manager->db->lastInsertId());
         }
         return $state;
     }
-
-
 }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace ticketing\model;
+namespace Ticketing\model;
 
 use projetVierge\classes\dbConnect;
 

@@ -1,17 +1,17 @@
 <?php
 
-namespace ticketing\model;
+namespace Ticketing\model;
 
-class ticket{
+class Ticket{
 
-    protected int $TI_id;
-    protected int $TI_idClient;
-    protected int $TI_idUtilisateur;
-    protected int $TI_idTypeDemande;
-    protected int $TI_idPriorite;
-    protected string $TI_sujet;
-    protected string $TI_message;
-    protected bool $TI_etat;
+    protected $TI_id;
+    protected $TI_idClient;
+    protected $TI_idUtilisateur;
+    protected $TI_idTypeDemande;
+    protected $TI_idPriorite;
+    protected $TI_sujet;
+    protected $TI_message;
+    protected $TI_etat;
 
     public function getId(){
         return $this->TI_id;

@@ -17,25 +17,37 @@
     }
     </script>
     <script type="module" src="{{ pathRoot ~ 'public/js/custom.js' }}" defer></script>
-    <title>Mon projet MVC</title>
+    <title>Ticketing</title>
 </head>
 <body>
 
 
     {% block header %}
     <header class="container">
-        <h1>Mon projet MVC</h1>
+        <h1>Ticketing</h1>
         <nav class="nav">
             <ul class="nav justify-content-start">
                 <li class="nav-item">
                     <a class="nav-link" href="{{ pathRoot }}"> Accueil</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ pathRoot ~ 'users/listusers' }}"> Utilisateurs</a>
-                </li> 
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ pathRoot ~ 'users/createuser' }}"> Créer un utilisateur</a>
-                </li>    
+                {% if session.idClient is defined %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ pathRoot ~ 'client/connection' }}">Créer un ticket</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ pathRoot ~ 'user/registeruser' }}">Inscription membre du personnel</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ pathRoot ~ 'client/logout' }}">Déconnexion</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ pathRoot ~ 'client/connection' }}">Connexion</a>
+                    </li> 
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ pathRoot ~ 'client/createclient' }}">Inscription</a>
+                    </li>
+                {% endif %}   
             </ul>
         </nav>
     </header>
@@ -46,7 +58,8 @@
         <div class="row">
             <div class="col-12 mt-2">
 
-                {% block body %}{% endblock %}
+                {% block body %}
+                {% endblock %}
 
             </div>
         </div>
