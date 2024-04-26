@@ -1,6 +1,6 @@
 <?php
 
-namespace Ticketing\controller;
+namespace ticketing\controller;
 
 /**
  * Default base class for compiled templates.

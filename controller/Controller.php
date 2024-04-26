@@ -1,6 +1,6 @@
 <?php
 
-namespace Ticketing\controller;
+namespace ticketing\controller;
 
 use Twig\Loader\FilesystemLoader;
 use Twig\Environment;

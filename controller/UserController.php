@@ -1,11 +1,11 @@
 <?php
 
-namespace Ticketing\controller;
+namespace ticketing\controller;
 
 use ticketing\model\UserManager;
 use ticketing\model\User;
-use Ticketing\model\ClientManager;
-use Ticketing\model\Client;
+use ticketing\model\ClientManager;
+use ticketing\model\Client;
 
 
 class UserController extends Controller

@@ -1,6 +1,6 @@
 <?php
 
-namespace Ticketing\model;
+namespace ticketing\model;
 
 class UserManager extends Manager
 {
@@ -34,6 +34,16 @@ class UserManager extends Manager
             $newUser->setUT_id( $this->manager->db->lastInsertId());
         }
         return $state;
+    }
+
+    public function getUser( string $login )
+    {
+        $sql = "SELECT * FROM utilisateur WHERE UT_login=:login";
+        $req = $this->manager->db->prepare( $sql );
+        $req->execute([':login'=>$login] );
+        $data = $req->fetch(\PDO::FETCH_ASSOC);
+        $connectedUser = new User( $data );
+        return $connectedUser;
     }
 }
 

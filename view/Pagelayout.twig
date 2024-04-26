@@ -32,10 +32,17 @@
                 </li>
                 {% if session.idClient is defined %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ pathRoot ~ 'client/connection' }}">Créer un ticket</a>
+                        <a class="nav-link" href="{{ pathRoot ~ 'ticket/listparam' }}">Créer un ticket</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ pathRoot ~ 'user/registeruser' }}">Inscription membre du personnel</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ pathRoot ~ 'client/logout' }}">Déconnexion</a>
+                    </li>
+                {% elseif session.idUser is defined %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ pathRoot ~ 'ticket/listparam' }}">Créer un ticket</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ pathRoot ~ 'client/logout' }}">Déconnexion</a>

@@ -1,14 +1,16 @@
 <?php
 
-namespace Ticketing\controller;
+namespace ticketing\controller;
 
 use ticketing\model\ClientManager;
 use ticketing\model\Client;
-
+use ticketing\model\UserManager;
+use ticketing\model\User;
 
 class ClientController extends Controller
 {
     protected $clientManager;
+    protected $userManager;
 
 
     public function __construct( array $params=[] )
@@ -50,23 +52,78 @@ class ClientController extends Controller
     }
 
     public function connectclientAction(){
-        $loginUsed = $this->clientManager->isLoginUsed( $_POST['login'] );
-        if ( empty($loginUsed) ){
-            $data = [
-                'message' => 'Votre login est incorrect, veuillez réessayer'
-            ];
-            $this->render('client/Connectclient', $data);
-            exit;
-        }
-        $connectedClient = $this->clientManager->getClient( $_POST['login'] );
-        if(sodium_crypto_pwhash_str_verify( $connectedClient->getCI_password(), $_POST['password'] ) ) {
-            $_SESSION['idClient'] = $connectedClient->getCI_id();
-            header('Location:' . $this->pathRoot . 'Ticket/list');
-        } else {
-            $data = [
-                'message' => 'Votre mot de passe est incorrect, veuillez réessayer'
-            ];
-            $this->render('client/Connectclient', $data);
+        $this->userManager = new UserManager();
+        $userAccountData = $this->userManager->isAccountUsed( $_POST['login'] );
+        $userAccount = new User( $userAccountData );
+        if( !empty($userAccountData) ){
+           $isAccountActiv =  $userAccount->getUT_actif();
+            if( $isAccountActiv == false ){
+                $loginUsed = $this->clientManager->isLoginUsed( $_POST['login'] );
+                if ( empty($loginUsed) ){
+                    $data = [
+                        'message' => 'Votre login est incorrect, veuillez réessayer'
+                    ];
+                    $this->render('client/Connectclient', $data);
+                    exit;
+                }
+                $connectedClient = $this->clientManager->getClient( $_POST['login'] );
+                $isClientActiv = $connectedClient->getCI_actif();
+                if( $isClientActiv ){
+                    if(sodium_crypto_pwhash_str_verify( $connectedClient->getCI_password(), $_POST['password'] ) ) {
+                        $_SESSION['idClient'] = $connectedClient->getCI_id();
+                        header('Location:' . $this->pathRoot . 'Ticket/list');
+                    } else {
+                        $data = [
+                            'message' => 'Votre mot de passe est incorrect, veuillez réessayer'
+                        ];
+                        $this->render('client/Connectclient', $data);
+                    }
+                }else{
+                    $data = [
+                        'message' => 'Le compte auquel vous essayez de vous connecter n\'est plus actif'
+                    ];
+                    $this->render('client/Connectclient', $data);
+                    exit;
+                }
+            }else{
+                $connectedUser = $this->userManager->getUser( $_POST['login'] );
+                if(sodium_crypto_pwhash_str_verify( $connectedUser->getUT_password(), $_POST['password'] ) ) {
+                    $_SESSION['idUser'] = $connectedUser->getUT_id();
+                    header('Location:' . $this->pathRoot . 'Ticket/list');
+                } else {
+                    $data = [
+                        'message' => 'Votre mot de passe est incorrect, veuillez réessayer'
+                    ];
+                    $this->render('client/Connectclient', $data);
+                }
+            }
+        }else{
+            $loginUsed = $this->clientManager->isLoginUsed( $_POST['login'] );
+            if ( empty($loginUsed) ){
+                $data = [
+                    'message' => 'Votre login est incorrect, veuillez réessayer'
+                ];
+                $this->render('client/Connectclient', $data);
+                exit;
+            }
+            $connectedClient = $this->clientManager->getClient( $_POST['login'] );
+            $isClientActiv = $connectedClient->getCI_actif();
+            if( $isClientActiv ){
+                if(sodium_crypto_pwhash_str_verify( $connectedClient->getCI_password(), $_POST['password'] ) ) {
+                    $_SESSION['idClient'] = $connectedClient->getCI_id();
+                    header('Location:' . $this->pathRoot . 'Ticket/list');
+                } else {
+                    $data = [
+                        'message' => 'Votre mot de passe est incorrect, veuillez réessayer'
+                    ];
+                    $this->render('client/Connectclient', $data);
+                }
+            }else{
+                $data = [
+                    'message' => 'Le compte auquel vous essayez de vous connecter n\'est plus actif'
+                ];
+                $this->render('client/Connectclient', $data);
+            }
         }
     }
 
@@ -119,7 +176,7 @@ class ClientController extends Controller
         $loginUsed = $this->clientManager->isLoginUsed($newClient->getCI_login());
         if( !empty($loginUsed) ){
             $data=[
-                'message'  => 'Le login que vous avez choisi est déjà utilisé, veuillez en saisir un autre'
+                'message'  => 'Le pseudo que vous avez choisi est déjà utilisé, veuillez en saisir un autre'
             ];
             $this->render( 'client/Createclient', $data );
             exit;

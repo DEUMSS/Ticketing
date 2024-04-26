@@ -1,6 +1,6 @@
 <?php
 
-namespace Ticketing\model;
+namespace ticketing\model;
 
 use \DateTimeImmutable;
 use \ReflectionMethod;

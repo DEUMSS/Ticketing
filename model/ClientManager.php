@@ -1,6 +1,6 @@
 <?php
 
-namespace Ticketing\model;
+namespace ticketing\model;
 
 
 class ClientManager extends Manager
@@ -175,6 +175,7 @@ class ClientManager extends Manager
             ':prenom'       => $newClient->getCI_prenom(),
             ':entreprise'   => $newClient->getCI_entreprise(),
             ':dateCrea'     => $newClient->getCI_dateCrea()->format('Y-m-d'),
+            ':actif'        => true
         ]);
         if( $state ) {
             $newClient->setCI_id( $this->manager->db->lastInsertId());
