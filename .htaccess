@@ -1,4 +1,5 @@
 Options -MultiViews
 RewriteEngine on
+RewriteRule ^public/js/.* - [L] 
 #RewriteRule .* public/index.php [L]
 RewriteRule ^([a-zA-Z0-9\-\_\/\.]*)$ public/index.php?$1 [QSA]

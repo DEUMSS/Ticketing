@@ -1,0 +1,75 @@
+{% extends 'Pagelayout.twig' %}
+
+{%  block body %}
+
+    <div class="row">
+        <div class="col-6">
+            <h2> Votre ticket<h2>
+        </div>
+        <div class="container justify-content-end col-6 mt-2" style="display: flex;">
+            {% if ticket.TI_actif == true %}
+                <a class="btn btn-warning" href="{{ pathRoot ~ 'ticket/fermetureticket' }}" role="button">Fermer le ticket</a>
+            {% elseif ticket.TI_actif == false %}
+                <a class="btn btn-success" href="{{ pathRoot ~ 'ticket/ouvertureticket'}}">Ouvrir le ticket</a>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <div class="row mt-5 justify-content-center" style="display: flex;">
+        <div class="col-8"> 
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="sujet">Sujet :</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="sujet" placeholder="{{ticket.TI_sujet}}" disabled>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="sujet">Priorité :</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="sujet" placeholder="{{priorite}}" disabled>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="sujet">Typde de demande :</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="sujet" placeholder="{{typeDemande}}" disabled>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="sujet">Etat du ticket :</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="sujet" placeholder="{{ticket.TI_actif ? "Ouvert" : "Fermé"}}" disabled>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="sujet">Ticket du :</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="sujet" placeholder="{{ ticket.TI_dateCrea }}" disabled>
+            </div>
+
+            <div class="form-floating mb-3">
+                <p>Messages :</p>
+                <textarea class="form-control" style="height: 100px" disabled>{{ ticket.TI_message }}</textarea>
+            </div>
+
+            {{dump(traitement)}}
+
+            {% for message in traitement %}
+                <div class="form-floating mb-3">
+                <p>Le : {{ message.TM_dateMessage }}
+                    <textarea class="form-control" style="height: 100px" disabled>{{ message.TM_message }}</textarea>
+                </div>
+            {% endfor %}
+
+            <form action="{{ pathRoot ~ 'ticket/sendmessage' }}" name="updateForm" method="post">
+                <div class="form-floating">
+                    <textarea id="newMessage" name="newMessage" class="form-control" style="height: 100px" required></textarea>
+                    <label for="newMessage">Répondre :</label>
+                </div>
+                <div class="row mt-5 justify-content-end" style="display: flex;">
+                    <div class="col-1">
+                        <button type="submit" class="btn btn-primary mb-5">Envoyer</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+{% endblock %}

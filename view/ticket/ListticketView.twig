@@ -2,93 +2,128 @@
 
 {%  block body %}
 
-  <h2>{{ nbUsers }} Vos ticket(s)</h2>
 
-  {% if vars.message is defined %}
-    {% set status = vars.status is defined ? vars.status : 'success' %}
-  <p class="alert alert-{{ status }}">{{ vars.message }}</p>
+  <h2>Vos ticket(s)</h2>
+
+  {% if resultat is defined %}
+      <p class="alert {{ resultat }}">{{ message }}</p>
   {% endif %}
 
 
 
-  {% if listUsers is defined %}
-  
-      <div class="row">
-          <div class="col-12">
-              <table
-                    class="table"
-                    id="table"
-                    data-toggle="table"
-                    data-url="{{ pathRoot ~ 'ticket/listticket' }}"
-                    data-ajax="ajaxRequest"
-                    data-search="true"
-                    data-searchable="true"
-                    data-side-pagination="server"
-                    data-sortable="true"
-                    data-pagination="true"
-                    data-page-size="5">
-                <thead>
-                <tr>
-                    <th data-field="id" 
-                        data-searchable="false"
-                        data-sortable="true"
-                    >ID</th>
-                    <th data-field="subject" 
-                        data-searchable="true"
-                        data-sortable="true"
-                    >Sujet</th>
-                    <th data-field="dateCrea" 
-                        data-searchable="true"
-                        data-sortable="true"
-                    >Date de création</th>
-                    <th data-field="dateModif" data-searchable="true">Date de modification</th>
-                    <th data-field="demande" data-searchable="true">Demande</th>
-                    <th data-field="etat" 
-                        data-searchable="false"
-                    >Etat</th>
-                </tr>
-                </thead>
-              </table>
-          </div>
+    <div class="container">
+      <div class="col-row mt-3">
+        <div class="col-6">
+          <button class="btn btn-primary mr-2" id="btnTicketOuvert" 
+          data-url="{{ pathRoot ~ 'ticket/listticketBS' }}"
+          data-field="ouvert"
+          data-val="0"><i class="fa-solid fa-lock-open"></i>Tickets ouverts</button>
+          <button class="btn btn-secondary mr-2" id="btnTicketFerme" 
+          data-url="{{ pathRoot ~ 'ticket/listticketBS' }}"
+          data-field="ferme"
+          data-val="0"><i class="fa-solid fa-lock"></i>Tickets fermés</button>
+        </div>
       </div>
-      <script>
+    </div>
+  
+    <div class="row mt-3">
+        <div class="col-12">
+            <table
+                  class="table"
+                  id="table"
+                  data-toggle="table"
+                  data-url="{{ pathRoot ~ 'ticket/listticketBS' }}"
+                  data-ajax="ajaxRequest"
+                  data-search="true"
+                  data-searchable="true"
+                  data-side-pagination="server"
+                  data-sortable="true"
+                  data-pagination="true"
+                  data-query-params="queryParams"
+                  data-page-size="5">
+              <thead>
+              <tr>
+                  <th data-field="TI_id" 
+                      data-searchable="false"
+                      data-sortable="true"
+                  >N°</th>
+                  <th data-field="TI_idTypeDemande" 
+                  data-searchable="true"
+                  data-sortable="true"
+                  >Demande</th>
+                  <th data-field="TI_idPriorite" 
+                  data-searchable="true"
+                  data-sortable="true"
+                  >Priorité</th>
+                  <th data-field="TI_sujet" 
+                      data-searchable="true"
+                      data-sortable="false"
+                  >Sujet</th>
+                  <th data-field="TI_dateCrea" 
+                      data-searchable="true"
+                      data-sortable="true"
+                  >Date de création</th>
+                    <th data-field="TI_dateMAJ" 
+                      data-searchable="true"
+                      data-sortable="true"
+                  >Date de modification</th>
+                  <th data-field="TI_actif" 
+                      data-searchable="false"
+                  >Etat</th>
+                  <th data-field="action" 
+                      data-searchable="false"
+                      data-formatter="actionFormatter"
+                  >Action</th>
+              </tr>
+              </thead>
+            </table>
+        </div>
+    </div>
+    <script>
 
-        // your custom ajax request here
-        function ajaxRequest(params) {
-          const url = $('#table').data('url')
+      // your custom ajax request here
+      function ajaxRequest(params) {
+        const url = $('#table').data('url')
 
-          $.get(url + '/?' + $.param(params.data))
-            .then(function (res) {
-              params.success( JSON.parse(res) )
+        $.get(url + '/?' + $.param(params.data))
+          .then(function (res) {
+            params.success( JSON.parse(res) )
+          })
+      }
+
+      function queryParams( params ) {
+        params.ferme = document.querySelector('#btnTicketFerme').dataset.val
+        params.ouvert = document.querySelector('#btnTicketOuvert').dataset.val
+        document.querySelector('#btnTicketFerme').dataset.val = 0
+        document.querySelector('#btnTicketOuvert').dataset.val = 0
+        return params
+      }
+
+      window.onload = () => {
+        const allBtn = document.querySelectorAll(".btn")
+
+        allBtn.forEach( function(btn) {
+            btn.addEventListener('click', (e)=>{
+                const elem = e.target
+                elem.dataset.val = 1
+                $('#table').bootstrapTable('refresh')
             })
-        }
+        })
+    }
 
-        function profilFormatter(value, row) 
-        {
-          return '<a class="btn btn-sm btn-primary" href="{{ pathRoot ~ 'users/updateprofil/id/' }}' + row.id + '">Completer le profil</a>'
-        }
+      function actionFormatter(value, row) 
+      {
+        return '<a class="btn btn-sm btn-primary" href="{{ pathRoot ~ 'ticket/updateticket/id/' }}' + row.TI_id + '"> Voir le ticket </a>'
+      }
 
+      function adminFormatter(value, row)
+      {
+        const isChecked = value == 1 ? 'checked' : ''
+        const isAdmin = value == true ? 0 : 1
+        return ['<div class="form-check form-switch">',
+              '<input class="form-check-input admin-line" data-isadmin="' + isAdmin + '" data-url="{{ pathRoot ~ 'users/setadmin/id/' }}' + row.id + '/isadmin/" type="checkbox" role="switch" id="flexSwitchCheckChecked" ' + isChecked + '>',
+              '</div>'].join('')
+      }
 
-        function activeFormatter(value, row)
-        {
-          const isChecked = value == 1 ? 'checked' : ''
-          const isActif = value == false ? 0 : 1
-          return ['<div class="form-check form-switch">',
-                '<input class="form-check-input active-line" data-isactif="' + isActif + '" data-url="{{ pathRoot ~ 'users/setuserBS/id/' }}' + row.id + '/isactif/" type="checkbox" role="switch" id="flexSwitchCheckChecked" ' + isChecked + '>',
-                '</div>'].join('')
-        }
-
-        function adminFormatter(value, row)
-        {
-          const isChecked = value == 1 ? 'checked' : ''
-          const isAdmin = value == true ? 0 : 1
-          return ['<div class="form-check form-switch">',
-                '<input class="form-check-input admin-line" data-isadmin="' + isAdmin + '" data-url="{{ pathRoot ~ 'users/setadmin/id/' }}' + row.id + '/isadmin/" type="checkbox" role="switch" id="flexSwitchCheckChecked" ' + isChecked + '>',
-                '</div>'].join('')
-        }
-
-      </script>
-
-  {% endif %}
-
+    </script>
 {%  endblock %}

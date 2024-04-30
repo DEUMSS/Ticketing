@@ -15,7 +15,7 @@ class Manager
     public function __construct()
     {
         if( strstr( $_SERVER['HTTP_HOST'], '51.178.86.117' ) ) {
-			$this->_dsn = 'mysql:host=localhost:3306;dbname=damien3';
+			$this->_dsn = 'mysql:host=localhost:3306;dbname=damien_3';
             $this->_login = 'damien';
             $this->_password = 'Cei7Thi&';
         } else {

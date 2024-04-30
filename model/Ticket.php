@@ -64,13 +64,13 @@ class Ticket{
     public function getTI_actif(){
         return $this->TI_actif;
     }
-    public function getTI_dateCrea(): ?\DateTimeImmutable
+    public function getTI_dateCrea()
     {
-        return $this->TI_dateCrea;
+        return $this->TI_dateCrea->format('d/m/Y H:i:s');
     }
-    public function getTI_dateMAJ(): ?\DateTimeImmutable
+    public function getTI_dateMAJ()
     {
-        return $this->TI_dateMAJ;
+        return $this->TI_dateMAJ->format('d/m/Y H:i:s');
     }
 
     public function setTI_id( int $id ){

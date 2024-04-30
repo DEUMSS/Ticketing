@@ -41,6 +41,107 @@ class TicketManager extends Manager
         }
         return $state;
     }
+
+    public function listTicket( array $params ){
+        $order = !empty( $params['order'] ) ? $params['order'] : 'ASC';
+        $sort = !empty( $params['sort'] ) ? $params['sort'] : 'TI_dateCrea';
+        $limit = !empty( $params['limit'] ) ? $params['limit'] : 10;
+        $offset = !empty( $params['offset'] ) ? $params['offset'] : 0;
+        $strLike = false;
+        if( !empty( $params['search'] ) && !empty( $params['searchable'] ) ) {
+            foreach( $params['searchable'] as $searchItem ) {
+                if ($searchItem == "typeDemande"){
+                    $searchItem = "typedemande.TD_typeDemande";
+                }
+                if ($searchItem == "priorite"){
+                    $searchItem = "priorite.PR_priorite";
+                }
+                $search = $params['search'];
+                $strLike .= $searchItem . " LIKE '%$search%' OR ";
+            }
+            $strLike = trim( $strLike, ' OR ' );
+        }
+        $sql = "SELECT ticket.*, typedemande.TD_id AS Type, priorite.PR_id AS Priority FROM ticket 
+            INNER JOIN typedemande ON ticket.TI_idTypeDemande = typedemande.TD_id 
+            INNER JOIN priorite ON ticket.TI_idPriorite = priorite.PR_id";
+        $reqWhereUse = false;
+        if ($_SESSION['idClient']){
+            $sql .= " WHERE TI_idClient = " . $_SESSION['idClient'];
+            $reqWhereUse = true;
+        }
+        if( $strLike ) {
+            if ($reqWhereUse){
+                $sql .= " AND (" . $strLike . ")";
+            } else {
+                $sql .= " WHERE " . $strLike;
+                $reqWhereUse = true;
+            }
+        }
+        $sqlFerme = false;
+        if ($params['ferme']){
+            $sqlFerme = "ticket.TI_actif = 0";
+        } elseif ($params['ouvert']){
+            $sqlFerme = "ticket.TI_actif = 1";
+        }
+        if ($sqlFerme){
+            if ($reqWhereUse){
+                $sql .= " AND " . $sqlFerme;
+            } else {
+                $sql .= " WHERE " . $sqlFerme;
+                $reqWhereUse = true;
+            }
+        }        
+        $sql .= " ORDER BY $sort $order";
+        $sql .= " LIMIT $offset, $limit";
+        $response = $this->manager->db->query( $sql );
+        $dataList = $response->fetchAll( \PDO::FETCH_ASSOC );
+        $listTickets = [];
+        foreach ( $dataList as $data ) {
+            $listTickets[] = new Ticket( $data );
+        }
+        return $listTickets;
+    }
+
+    public function getTypeDemandeById(int $idTypeDemande ){
+        $sql = "SELECT TD_typeDemande FROM typedemande WHERE TD_id=:id";
+        $req = $this->manager->db->prepare( $sql );
+        $req->execute([
+            ':id'    => $idTypeDemande,
+        ]);
+        $typeDemande = $req->fetch();
+        return mb_convert_encoding($typeDemande['TD_typeDemande'], 'UTF-8');
+    }
+
+    public function getPrioriteById(int $idPriorite){
+        $sql = "SELECT PR_priorite FROM priorite WHERE PR_id=:id";
+        $req=$this->manager->db->prepare($sql);
+        $req->execute([
+            ':id' => $idPriorite
+        ]);
+        $priorite = $req->fetch();
+        return mb_convert_encoding($priorite['PR_priorite'], 'UTF-8');
+    }
+
+    public function getTicketById( int $idTicket ){
+        $sql = "SELECT * FROM ticket WHERE TI_id=:id";
+        $req = $this->manager->db->prepare($sql);
+        $req->execute([
+            ':id' => $idTicket
+        ]);
+        $dataTicket = $req->fetch(\PDO::FETCH_ASSOC);
+        $ticket = new Ticket( $dataTicket );
+        return $ticket;
+    }
+
+    public function updateDateMAJTicket( array $data ){
+        $sql = "UPDATE ticket SET TI_dateMAJ = :dateMAJ WHERE TI_id=:id";
+        $req = $this->manager->db->prepare($sql);
+        $state = $req->execute([
+            ':dateMAJ' => $data['dateMAJ'],
+            ':id'      => $_SESSION['idTicket']
+        ]);
+        return $state;
+    }
 }
 
 ?>

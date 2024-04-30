@@ -162,8 +162,6 @@ class ClientManager extends Manager
         return $loginUsed;
     }
 
-
-
     public function addClient( Client $newClient )
     {
         $sql = "INSERT INTO client(CI_login, CI_password, CI_nom, CI_prenom, CI_entreprise, CI_dateCrea, CI_actif) VALUES (:login, :password, :nom, :prenom, :entreprise, :dateCrea, :actif)";

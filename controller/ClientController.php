@@ -54,8 +54,8 @@ class ClientController extends Controller
     public function connectclientAction(){
         $this->userManager = new UserManager();
         $userAccountData = $this->userManager->isAccountUsed( $_POST['login'] );
-        $userAccount = new User( $userAccountData );
         if( !empty($userAccountData) ){
+            $userAccount = new User( $userAccountData );
            $isAccountActiv =  $userAccount->getUT_actif();
             if( $isAccountActiv == false ){
                 $loginUsed = $this->clientManager->isLoginUsed( $_POST['login'] );
@@ -187,10 +187,9 @@ class ClientController extends Controller
             header('Location:' . $this->pathRoot);
         }else{
             $data = [
-                'resultat'  => false,
                 'message'   => 'Une erreur c\'est produite lors de la création de votre compte'
             ];
-            $this->render( 'Index', $data );
+            $this->render( 'client/Createclient', $data );
         }
     }
     

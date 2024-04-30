@@ -19,43 +19,34 @@
     <script type="module" src="{{ pathRoot ~ 'public/js/custom.js' }}" defer></script>
     <title>Ticketing</title>
 </head>
-<body>
 
 
     {% block header %}
-    <header class="container">
-        <h1>Ticketing</h1>
-        <nav class="nav">
-            <ul class="nav justify-content-start">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ pathRoot }}"> Accueil</a>
-                </li>
-                {% if session.idClient is defined %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ pathRoot ~ 'ticket/listparam' }}">Créer un ticket</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ pathRoot ~ 'user/registeruser' }}">Inscription membre du personnel</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ pathRoot ~ 'client/logout' }}">Déconnexion</a>
-                    </li>
-                {% elseif session.idUser is defined %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ pathRoot ~ 'ticket/listparam' }}">Créer un ticket</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ pathRoot ~ 'client/logout' }}">Déconnexion</a>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ pathRoot ~ 'client/connection' }}">Connexion</a>
-                    </li> 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ pathRoot ~ 'client/createclient' }}">Inscription</a>
-                    </li>
-                {% endif %}   
-            </ul>
+    <header class="text bg-dark">
+        <div class="container-fluid">
+            <nav class="navbar  navbar-expand-lg" data-bs-theme="dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="{{ pathRoot ~ 'ticket/listticket' }}">Ticketing</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                        <div class="navbar-nav">
+                            {% if session.idClient is defined %}
+                                <a class="nav-link" href="{{ pathRoot ~ 'ticket/listparam' }}">Créer un ticket</a>
+                                <a class="nav-link" href="{{ pathRoot ~ 'user/registeruser' }}">Inscription membre du support</a>
+                                <a class="nav-link" href="{{ pathRoot ~ 'client/logout' }}">Déconnexion</a>
+                            {% elseif session.idUser is defined %}
+                                <a class="nav-link" href="{{ pathRoot ~ 'ticket/listparam' }}">Créer un ticket</a>
+                                <a class="nav-link" href="{{ pathRoot ~ 'client/logout' }}">Déconnexion</a>
+                            {% else %}
+                                <a class="nav-link" href="{{ pathRoot ~ 'client/connection' }}">Connexion</a>
+                                <a class="nav-link" href="{{ pathRoot ~ 'client/createclient' }}">Inscription</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </nav>
     </header>
     {% endblock %}
