@@ -2,15 +2,19 @@
 
 {%  block body %}
 
+    {% if resultat is defined %}
+        <p class="alert {{ resultat }}">{{ message }}</p>
+    {% endif %}
+
     <div class="row">
         <div class="col-6">
             <h2> Votre ticket<h2>
         </div>
         <div class="container justify-content-end col-6 mt-2" style="display: flex;">
             {% if ticket.TI_actif == true %}
-                <a class="btn btn-warning" href="{{ pathRoot ~ 'ticket/fermetureticket' }}" role="button">Fermer le ticket</a>
+                <a class="btn btn-warning" href="{{ pathRoot ~ 'ticket/fermetureticket/id/' ~ ticket.TI_id }}">Fermer le ticket</a>
             {% elseif ticket.TI_actif == false %}
-                <a class="btn btn-success" href="{{ pathRoot ~ 'ticket/ouvertureticket'}}">Ouvrir le ticket</a>
+                <a class="btn btn-success" href="{{ pathRoot ~ 'ticket/ouvertureticket/id/' ~ ticket.TI_id }}">Ouvrir le ticket</a>
             {% endif %}
         </div>
     </div>
@@ -48,7 +52,6 @@
                 <textarea class="form-control" style="height: 100px" disabled>{{ ticket.TI_message }}</textarea>
             </div>
 
-            {{dump(traitement)}}
 
             {% for message in traitement %}
                 <div class="form-floating mb-3">

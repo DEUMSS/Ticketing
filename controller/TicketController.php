@@ -162,6 +162,40 @@ class TicketController extends Controller
             $this->render('ticket/listticket', $data);
         }
     }
+
+    public function fermetureticketAction(){
+        $state = $this->ticketManager->fermetureTicket( $this->vars['id'] );
+        if( !$state ){
+            $data = [
+                'resultat' => 'alert-danger',
+                'message' => 'Une erreur c\'est produite lors de la fermeture de votre ticket'
+            ];
+            $this->render('ticket/Updateticket', $data);
+        }else{
+            $data = [
+                'resultat' => 'alert-success',
+                'message' => 'Votre ticket a bien était fermé'
+            ];
+            $this->render('ticket/listticket', $data);
+        }
+    }
+
+    public function ouvertureticketAction(){
+        $state = $this->ticketManager->ouvertureTicket( $this->vars['id'] );
+        if( !$state ){
+            $data = [
+                'resultat' => 'alert-danger',
+                'message' => 'Une erreur c\'est produite lors de l\'ouverture de votre ticket'
+            ];
+            $this->render('ticket/Updateticket', $data);
+        }else{
+            $data = [
+                'resultat' => 'alert-success',
+                'message' => 'Votre ticket a bien était ouvert'
+            ];
+            $this->render('ticket/listticket', $data);
+        }
+    }
 }
 
 ?>

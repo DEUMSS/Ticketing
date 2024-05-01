@@ -65,7 +65,7 @@ class TicketManager extends Manager
             INNER JOIN typedemande ON ticket.TI_idTypeDemande = typedemande.TD_id 
             INNER JOIN priorite ON ticket.TI_idPriorite = priorite.PR_id";
         $reqWhereUse = false;
-        if ($_SESSION['idClient']){
+        if (isset($_SESSION['idClient'])){
             $sql .= " WHERE TI_idClient = " . $_SESSION['idClient'];
             $reqWhereUse = true;
         }
@@ -139,6 +139,23 @@ class TicketManager extends Manager
         $state = $req->execute([
             ':dateMAJ' => $data['dateMAJ'],
             ':id'      => $_SESSION['idTicket']
+        ]);
+        return $state;
+    }
+
+    public function fermetureTicket( int $idTicket ){
+        $sql = "UPDATE ticket SET TI_actif = 0 WHERE TI_id = :id";
+        $req = $this->manager->db->prepare($sql);
+        $state = $req->execute([
+            ':id' => $idTicket
+        ]);
+        return $state;
+    }
+    public function ouvertureTicket( int $idTicket ){
+        $sql = "UPDATE ticket SET TI_actif = 1 WHERE TI_id = :id";
+        $req = $this->manager->db->prepare($sql);
+        $state = $req->execute([
+            ':id' => $idTicket
         ]);
         return $state;
     }

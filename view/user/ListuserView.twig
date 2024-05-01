@@ -2,7 +2,7 @@
 
 {%  block body %}
 
-  <h2>{{ nbUsers }} Utilisateur(s)</h2>
+  <h2>Liste des utilisateurs</h2>
 
   {% if resultat is defined %}
     <p class="alert {{ resultat }}">{{ message }}</p>
@@ -11,14 +11,14 @@
     <div class="container">
       <div class="col-row mt-3">
         <div class="col-6">
-          <button class="btn btn-primary mr-2" id="btnClientActif" 
-          data-url="{{ pathRoot ~ 'client/listclientBS' }}"
+          <button class="btn btn-primary mr-2" id="btnUsertActif" 
+          data-url="{{ pathRoot ~ 'user/listuserBS' }}"
           data-field="actif"
-          data-val="0"><i class="fa-solid fa-lock-open"></i>Clients actifs</button>
-          <button class="btn btn-secondary mr-2" id="btnClientInactif" 
-          data-url="{{ pathRoot ~ 'client/listclientBS' }}"
+          data-val="0"><i class="fa-solid fa-lock-open"></i>Utilisateurs actifs</button>
+          <button class="btn btn-secondary mr-2" id="btnUserInactif" 
+          data-url="{{ pathRoot ~ 'user/listuserBS' }}"
           data-field="inactif"
-          data-val="0"><i class="fa-solid fa-lock"></i>Clients inactifs</button>
+          data-val="0"><i class="fa-solid fa-lock"></i>Utilsateurs inactifs</button>
         </div>
       </div>
     </div>
@@ -30,7 +30,7 @@
                 class="table"
                 id="table"
                 data-toggle="table"
-                data-url="{{ pathRoot ~ 'client/listclientBS' }}"
+                data-url="{{ pathRoot ~ 'user/listuserBS' }}"
                 data-ajax="ajaxRequest"
                 data-search="true"
                 data-searchable="true"
@@ -41,30 +41,34 @@
                 data-page-size="5">
             <thead>
             <tr>
-                <th data-field="CI_id" 
+                <th data-field="UT_id" 
                     data-searchable="false"
                     data-sortable="true"
                 >N°</th>
-                <th data-field="CI_prenom" 
+                <th data-field="UT_prenom" 
                 data-searchable="true"
                 data-sortable="false"
                 >Prénom</th>
-                <th data-field="CI_nom" 
+                <th data-field="UT_nom" 
                 data-searchable="true"
                 data-sortable="false"
                 >Nom</th>
-                <th data-field="CI_login" 
+                <th data-field="UT_login" 
                     data-searchable="true"
                     data-sortable="false"
                 >Login</th>
-                <th data-field="CI_dateCrea" 
+                <th data-field="UT_dateCrea" 
                     data-searchable="true"
                     data-sortable="true"
                 >Date de création</th>
-                <th data-field="CI_actif" 
+                <th data-field="UT_actif" 
                     data-searchable="false"
                     data-sortable="true"
                 >Etat</th>
+                <th data-field="UT_role" 
+                    data-searchable="true"
+                    data-sortable="true"
+                >Rôle</th>
                 <th data-field="action" 
                     data-searchable="false"
                     data-formatter="actionFormatter"
@@ -87,10 +91,10 @@
       }
 
       function queryParams( params ) {
-        params.actif = document.querySelector('#btnClientActif').dataset.val
-        params.inactif = document.querySelector('#btnClientInactif').dataset.val
-        document.querySelector('#btnClientActif').dataset.val = 0
-        document.querySelector('#btnClientInactif').dataset.val = 0
+        params.actif = document.querySelector('#btnUserActif').dataset.val
+        params.inactif = document.querySelector('#btnUserInactif').dataset.val
+        document.querySelector('#btnUserActif').dataset.val = 0
+        document.querySelector('#btnUserInactif').dataset.val = 0
         return params
       }
 
@@ -108,7 +112,7 @@
 
       function actionFormatter(value, row) 
       {
-        return '<a class="btn btn-sm btn-primary" href="{{ pathRoot ~ 'client/updateclient/id/' }}' + row.CI_id + '"> Voir le profil </a>'
+        return '<a class="btn btn-sm btn-primary" href="{{ pathRoot ~ 'client/updateuser/id/' }}' + row.CI_id + '"> Voir le profil </a>'
       }
 
 

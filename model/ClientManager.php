@@ -172,7 +172,7 @@ class ClientManager extends Manager
             ':nom'          => $newClient->getCI_nom(),
             ':prenom'       => $newClient->getCI_prenom(),
             ':entreprise'   => $newClient->getCI_entreprise(),
-            ':dateCrea'     => $newClient->getCI_dateCrea()->format('Y-m-d'),
+            ':dateCrea'     => $newClient->getCI_dateCrea(),
             ':actif'        => true
         ]);
         if( $state ) {
@@ -180,5 +180,72 @@ class ClientManager extends Manager
         }
         return $state;
     }
+
+    public function listClient( array $params ){
+        $order = !empty( $params['order'] ) ? $params['order'] : 'ASC';
+        $sort = !empty( $params['sort'] ) ? $params['sort'] : 'CI_dateCrea';
+        $limit = !empty( $params['limit'] ) ? $params['limit'] : 10;
+        $offset = !empty( $params['offset'] ) ? $params['offset'] : 0;
+        $strLike = false;
+        if( !empty( $params['search'] ) && !empty( $params['searchable'] ) ) {
+            foreach( $params['searchable'] as $searchItem ) {
+                $search = $params['search'];
+                $strLike .= $searchItem . " LIKE '%$search%' OR ";
+            }
+            $strLike = trim( $strLike, ' OR ' );
+        }
+        $sql = "SELECT * FROM client"; 
+        $reqWhereUse = false;
+        if( $strLike ) {
+            if ($reqWhereUse){
+                $sql .= " AND (" . $strLike . ")";
+            } else {
+                $sql .= " WHERE " . $strLike;
+                $reqWhereUse = true;
+            }
+        }
+        $sqlActif = false;
+        if ($params['inactif']){
+            $sqlActif = "CI_actif = 0";
+        } elseif ($params['actif']){
+            $sqlActif = "CI_actif = 1";
+        }
+        if ($sqlActif){
+            if ($reqWhereUse){
+                $sql .= " AND " . $sqlActif;
+            } else {
+                $sql .= " WHERE " . $sqlActif;
+                $reqWhereUse = true;
+            }
+        }        
+        $sql .= " ORDER BY $sort $order";
+        $sql .= " LIMIT $offset, $limit";
+        $response = $this->manager->db->query( $sql );
+        $dataList = $response->fetchAll( \PDO::FETCH_ASSOC );
+        $listClient = [];
+        foreach ( $dataList as $data ) {
+            $listClient[] = new Client( $data );
+        }
+        return $listClient;
+    }
+
+    public function desactiveClient( int $idClient ){
+        $sql = "UPDATE client SET CI_actif = 0 WHERE CI_id = :id";
+        $req = $this->manager->db->prepare($sql);
+        $state = $req->execute([
+            ':id' => $idClient
+        ]);
+        return $state;
+    }
+    
+    public function activeClient( int $idClient ){
+        $sql = "UPDATE client SET CI_actif = 1 WHERE CI_id = :id";
+        $req = $this->manager->db->prepare($sql);
+        $state = $req->execute([
+            ':id' => $idClient
+        ]);
+        return $state;
+    }
+
 }
 

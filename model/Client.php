@@ -105,9 +105,9 @@ class Client
     {
         return $this->CI_prenom;
     }
-    public function getCI_dateCrea(): ?\DateTimeImmutable
+    public function getCI_dateCrea()
 	{
-		return $this->CI_dateCrea;
+		return $this->CI_dateCrea->format('d/m/Y');
 	}
     public function getCI_entreprise(){
         return $this->CI_entreprise;

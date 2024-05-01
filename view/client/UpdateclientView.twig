@@ -1,0 +1,64 @@
+{% extends 'Pagelayout.twig' %}
+
+{%  block body %}
+
+    {% if resultat is defined %}
+        <p class="alert {{ resultat }}">{{ message }}</p>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-6">
+            <h2>Informations du compte<h2>
+        </div>
+        {% if clientIsUser == false %}
+            <div class="container justify-content-end col-6 mt-2" style="display: flex;">
+                {% if client.CI_actif == true %}
+                    <a class="btn btn-warning" href="{{ pathRoot ~ 'client/desactiveclient/id/' ~ client.CI_id }}">Désactivé le compte</a>
+                {% elseif client.CI_actif == false %}
+                    <a class="btn btn-success" href="{{ pathRoot ~ 'client/activeclient/id/' ~ client.CI_id }}">Activé le compte</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+
+    <div class="row mt-5 justify-content-center" style="display: flex;">
+        <div class="col-8">
+            {% if clientIsUser == true %}
+                <p class="text-center"><i>Ce compte client est devenue un compte utilisateur</i></p>
+            {% endif %} 
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="sujet">Nom :</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="sujet" placeholder="{{client.CI_nom}}" disabled>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="sujet">Prénom :</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="sujet" placeholder="{{client.CI_prenom}}" disabled>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="sujet">Loign :</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="sujet" placeholder="{{client.CI_login}}" disabled>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="sujet">Entreprise :</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="sujet" placeholder="{{client.CI_entreprise}}" disabled>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="sujet">Compte créé le :</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="sujet" placeholder="{{ client.CI_dateCrea }}" disabled>
+            </div>
+
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="sujet">Etat du compte :</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="sujet" placeholder="{{client.CI_actif ? "Actif" : "Inactif"}}" disabled>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

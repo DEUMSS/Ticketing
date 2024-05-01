@@ -16,6 +16,7 @@ class ClientController extends Controller
     public function __construct( array $params=[] )
     {
         $this->clientManager = new ClientManager();
+        $this->userManager = new UserManager();
         parent::__construct( $params );
     }
 
@@ -32,9 +33,34 @@ class ClientController extends Controller
     {    }
 
 
-    public function updateclientAction() {
-        
+    public function updateclientAction(){
+        if(isset($this->vars['id'])){
+            $client = $this->clientManager->getClientById( $this->vars['id']);
+            if(isset($client)){
+                $isClientUser = $this->userManager->isAccountUsed( $client->getCI_login() );
+                if(empty($isClientUser)){
+                    $data['clientIsUser'] = false;
+                }else{
+                    $data['clientIsUser'] = true;
+                }
+                $data['client'] = $client;
+                $this->render('client/updateclient', $data );
+            }else{
+                $data = [
+                'resultat'  => 'alert-danger',
+                'message'   => 'Une erreur est survenue lors de la récupération des infomations du compte'
+            ];
+            $this->render('client/listclient', $data);    
+            }
+        }else{
+            $data = [
+            'resultat'  => 'alert-danger',
+            'message'   => 'Une erreur est survenue lors de la récupération de l\'id du compte'
+        ];
+        $this->render('client/listclient', $data);
+        }
     }
+
 
 
 	public function deleteclientAction()
@@ -56,7 +82,7 @@ class ClientController extends Controller
         $userAccountData = $this->userManager->isAccountUsed( $_POST['login'] );
         if( !empty($userAccountData) ){
             $userAccount = new User( $userAccountData );
-           $isAccountActiv =  $userAccount->getUT_actif();
+            $isAccountActiv =  $userAccount->getUT_actif();
             if( $isAccountActiv == false ){
                 $loginUsed = $this->clientManager->isLoginUsed( $_POST['login'] );
                 if ( empty($loginUsed) ){
@@ -194,17 +220,51 @@ class ClientController extends Controller
     }
     
 
-    public function listclientAction()
-    {
-        $nbUsers = $this->clientManager->countAll() ?? 0;
-        $listUsers = $this->clientManager->getAllClient([]);
-        $data = [
-            "nbUsers"       => $nbUsers,
-            "listUsers"     => $listUsers,
-            "titre"		    => "Page utilisateur.",
-			"vars"			=> $this->vars
-        ];
-        $this->render( 'client/listclient', $data );
+    public function listclientAction(){
+        $data = [];
+        $this->render('client/listclient', $data);
+    }
+
+    public function listclientBSAction (){
+        if(isset($_SESSION['idUser'])){
+            $searchParams = [
+                'search'		=> $this->vars['search'],
+                'sort'			=> $this->vars['sort'],
+                'order'			=> $this->vars['order'],
+                'offset'		=> $this->vars['offset'],
+                'limit'			=> $this->vars['limit'],
+                'searchable'	=> $this->vars['searchable'],
+                'inactif'       => $this->vars['inactif'] == 1,
+                'actif'         => $this->vars['actif'] == 1
+            ];
+            
+            $listClient = $this->clientManager->listClient( $searchParams );
+            $searchParams['offset'] = "";
+            $searchParams['limit'] = "";
+            $nbClient = count($this->clientManager->listClient($searchParams));
+    
+            $dataBs = [];
+            foreach( $listClient as $client ) {
+                $dataBs[] = [
+                    'CI_id'             => $client->getCI_id(),
+                    'CI_prenom'         => $client->getCI_prenom(),
+                    'CI_nom'            => $client->getCI_nom(),
+                    'CI_login'          => $client->getCI_login(),
+                    'CI_dateCrea'        => $client->getCI_dateCrea(),
+                    'CI_actif'          => $client->getCI_actif() ? "Ouvert" : "Fermé"
+                ];
+            }
+    
+            $data = [
+                "rows"      => $dataBs,
+                "total"     => $nbClient
+            ];
+            $jsData = json_encode( $data );
+            echo $jsData;
+        }else{
+            $data=[];
+            $this->render('ticket/listclient', $data );
+        }
     }
 
     public function logoutAction(){
@@ -212,6 +272,41 @@ class ClientController extends Controller
         header('Location:' . $this->pathRoot);
         exit;
     }
+
+    public function desactiveclientAction(){
+        $state = $this->clientManager->desactiveClient( $this->vars['id'] );
+        if( !$state ){
+            $data = [
+                'resultat' => 'alert-danger',
+                'message' => 'Une erreur c\'est produite lors de la cloturation du compte'
+            ];
+            $this->render('client/updateclient', $data);
+        }else{
+            $data = [
+                'resultat' => 'alert-success',
+                'message' => 'Le compte a bien était rendu inactif'
+            ];
+            $this->render('client/listclient', $data);
+        }
+    }
+
+    public function activeclientAction(){
+        $state = $this->clientManager->activeClient( $this->vars['id'] );
+        if( !$state ){
+            $data = [
+                'resultat' => 'alert-danger',
+                'message' => 'Une erreur c\'est produite lors de la réouverture du compte'
+            ];
+            $this->render('client/updateclient', $data);
+        }else{
+            $data = [
+                'resultat' => 'alert-success',
+                'message' => 'Le compte a bien était réouvert'
+            ];
+            $this->render('client/listclient', $data);
+        }
+    }
+
 }
 
 

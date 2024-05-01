@@ -16,7 +16,7 @@ if( $data !== null ) {
 }
 
 // App name witch set in namespaces
-$appName = 'Ticketing';
+$appName = 'ticketing';
 
 $queryServer = isset($_SERVER['REDIRECT_QUERY_STRING']) ? $_SERVER['REDIRECT_QUERY_STRING'] : '';
 $queryString = rtrim( $queryServer, '/' );
