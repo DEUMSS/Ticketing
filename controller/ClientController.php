@@ -20,18 +20,10 @@ class ClientController extends Controller
         parent::__construct( $params );
     }
 
-
-
     public function defaultAction()
     {
         $this->connectionAction();
     }
-
-
-    
-    public function clientAction()
-    {    }
-
 
     public function updateclientAction(){
         if(isset($this->vars['id'])){
@@ -61,30 +53,21 @@ class ClientController extends Controller
         }
     }
 
-
-
-	public function deleteclientAction()
-	{
-		if( isset( $this->vars['id'] ) ) {
-			if( $this->clientManager->deleteClient( $this->vars['id'] ) ) {
-				return $this->redirectToRoute( 'client/listclient', ['message'=>'Utilisateur effacé'] );
-			}
-		}
-	}
-
     public function connectionAction(){
         $data=[];
         $this->render('client/Connectclient', $data);
     }
 
     public function connectclientAction(){
+        $login = filter_var($_POST['login']);
+        $password = filter_var($_POST['password']);
         $this->userManager = new UserManager();
-        $userAccountData = $this->userManager->isAccountUsed( $_POST['login'] );
+        $userAccountData = $this->userManager->isAccountUsed( $login );
         if( !empty($userAccountData) ){
             $userAccount = new User( $userAccountData );
             $isAccountActiv =  $userAccount->getUT_actif();
             if( $isAccountActiv == false ){
-                $loginUsed = $this->clientManager->isLoginUsed( $_POST['login'] );
+                $loginUsed = $this->clientManager->isLoginUsed( $login );
                 if ( empty($loginUsed) ){
                     $data = [
                         'message' => 'Votre login est incorrect, veuillez réessayer'
@@ -92,10 +75,10 @@ class ClientController extends Controller
                     $this->render('client/Connectclient', $data);
                     exit;
                 }
-                $connectedClient = $this->clientManager->getClient( $_POST['login'] );
+                $connectedClient = $this->clientManager->getClient( $login );
                 $isClientActiv = $connectedClient->getCI_actif();
                 if( $isClientActiv ){
-                    if(sodium_crypto_pwhash_str_verify( $connectedClient->getCI_password(), $_POST['password'] ) ) {
+                    if(sodium_crypto_pwhash_str_verify( $connectedClient->getCI_password(), $password ) ) {
                         $_SESSION['idClient'] = $connectedClient->getCI_id();
                         header('Location:' . $this->pathRoot . 'Ticket/list');
                     } else {
@@ -112,12 +95,12 @@ class ClientController extends Controller
                     exit;
                 }
             }else{
-                $connectedUser = $this->userManager->getUser( $_POST['login'] );
+                $connectedUser = $this->userManager->getUser( $login );
                 $roleUser = $connectedUser->getUT_role();
                 if($roleUser == "ADMIN"){
                     $_SESSION['roleUser'] = $roleUser;
                 }
-                if(sodium_crypto_pwhash_str_verify( $connectedUser->getUT_password(), $_POST['password'] ) ) {
+                if(sodium_crypto_pwhash_str_verify( $connectedUser->getUT_password(), $password ) ) {
                     $_SESSION['idUser'] = $connectedUser->getUT_id();
                     header('Location:' . $this->pathRoot . 'Ticket/list');
                 } else {
@@ -128,7 +111,7 @@ class ClientController extends Controller
                 }
             }
         }else{
-            $loginUsed = $this->clientManager->isLoginUsed( $_POST['login'] );
+            $loginUsed = $this->clientManager->isLoginUsed( $login );
             if ( empty($loginUsed) ){
                 $data = [
                     'message' => 'Votre login est incorrect, veuillez réessayer'
@@ -136,10 +119,10 @@ class ClientController extends Controller
                 $this->render('client/Connectclient', $data);
                 exit;
             }
-            $connectedClient = $this->clientManager->getClient( $_POST['login'] );
+            $connectedClient = $this->clientManager->getClient( $login );
             $isClientActiv = $connectedClient->getCI_actif();
             if( $isClientActiv ){
-                if(sodium_crypto_pwhash_str_verify( $connectedClient->getCI_password(), $_POST['password'] ) ) {
+                if(sodium_crypto_pwhash_str_verify( $connectedClient->getCI_password(), $password ) ) {
                     $_SESSION['idClient'] = $connectedClient->getCI_id();
                     header('Location:' . $this->pathRoot . 'Ticket/list');
                 } else {
