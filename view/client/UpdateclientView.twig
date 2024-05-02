@@ -10,14 +10,16 @@
         <div class="col-6">
             <h2>Informations du compte<h2>
         </div>
-        {% if clientIsUser == false %}
-            <div class="container justify-content-end col-6 mt-2" style="display: flex;">
-                {% if client.CI_actif == true %}
-                    <a class="btn btn-warning" href="{{ pathRoot ~ 'client/desactiveclient/id/' ~ client.CI_id }}">Désactivé le compte</a>
-                {% elseif client.CI_actif == false %}
-                    <a class="btn btn-success" href="{{ pathRoot ~ 'client/activeclient/id/' ~ client.CI_id }}">Activé le compte</a>
-                {% endif %}
-            </div>
+        {% if session.roleUser is defined %}
+            {% if clientIsUser == false %}
+                <div class="container justify-content-end col-6 mt-2" style="display: flex;">
+                    {% if client.CI_actif == true %}
+                        <a class="btn btn-warning" href="{{ pathRoot ~ 'client/desactiveclient/id/' ~ client.CI_id }}">Désactivé le compte</a>
+                    {% elseif client.CI_actif == false %}
+                        <a class="btn btn-success" href="{{ pathRoot ~ 'client/activeclient/id/' ~ client.CI_id }}">Activé le compte</a>
+                    {% endif %}
+                </div>
+            {% endif %}
         {% endif %}
     </div>
 

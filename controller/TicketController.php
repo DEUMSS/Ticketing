@@ -91,13 +91,13 @@ class TicketController extends Controller
         $state = $this->ticketManager->createTicket( $newTicket );
         if( $state ){
             $data = [
-                'resultat'  => true,
+                'resultat'  => 'alert-success',
                 'message'   => 'Votre ticket à bien était créé !'
             ];
             $this->render('ticket/listticket', $data);
         }else{
             $data = [
-                'resultat'  => false,
+                'resultat'  => 'alert-danger',
                 'message'   => 'Une erreur c\'est produite lors de la création de votre ticket'
             ];
             $this->render('ticket/createticket', $data);

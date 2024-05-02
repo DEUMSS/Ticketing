@@ -6,25 +6,9 @@
         <h2>Création d'un ticket</h2>
     </div>
 
-    {% if resultat is defined %}
-        {% if resultat == true %}
-            <div class="row">
-                <div class="col-6">
-                    <div class="p-3 text-success-emphasis bg-success-subtle border border-success-subtle rounded-3">
-                        {{ message }}
-                    </div>
-                </div>
-            </div>
-        {% else %}
-            <div class="row">
-                <div class="col-6">
-                    <div class="p-3 text-warning-emphasis bg-warning-subtle border border-warning-subtle rounded-3">
-                        {{ message }}
-                    </div>
-                </div>
-            </div>
-        {% endif %}
-    {% endif %}
+   {% if resultat is defined %}
+      <p class="alert {{ resultat }}">{{ message }}</p>
+  {% endif %}
         
 
     <div class="row justify-content-center mt-3">
