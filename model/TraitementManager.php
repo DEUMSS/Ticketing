@@ -15,7 +15,7 @@ class TraitementManager extends manager{
         $req->execute([
             ':id' => $idTicket
         ]);
-        $data = $req->fetchAll(\PDO::FETCH_ASSOC);
+        $data = mb_convert_encoding($req->fetchAll(\PDO::FETCH_ASSOC), 'UTF-8', 'ISO-8859-1');
         $traitements = [];
 		foreach ( $data as $traitement ) {
             $traitements[] = new Traitement( $traitement );

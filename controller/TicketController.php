@@ -58,7 +58,7 @@ class TicketController extends Controller
             foreach( $listTicket as $ticket ) {
                 $dataBs[] = [
                     'TI_id'             => $ticket->getTI_id(),
-                    'TI_idTypeDemande'  => mb_convert_encoding($this->ticketManager->getTypeDemandeById($ticket->getTI_idTypeDemande()), 'UTF-8'),
+                    'TI_idTypeDemande'  => $this->ticketManager->getTypeDemandeById($ticket->getTI_idTypeDemande()),
                     'TI_idPriorite'     => $this->ticketManager->getPrioriteById($ticket->getTI_idPriorite()),
                     'TI_sujet'          => $ticket->getTI_sujet(),
                     'TI_dateCrea'       => $ticket->getTI_dateCrea(),
@@ -85,7 +85,7 @@ class TicketController extends Controller
             'TI_idTypeDemande'  => $_POST['typeDemande'],
             'TI_idPriorite'     => $_POST['priorite'],
             'TI_sujet'          => $_POST['sujet'],
-            'TI_message'        => $_POST['message']
+            'TI_message'        => $_POST['message'],
         ];
         $newTicket = new Ticket($data);
         $state = $this->ticketManager->createTicket( $newTicket );

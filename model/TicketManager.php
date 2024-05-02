@@ -13,14 +13,14 @@ class TicketManager extends Manager
         $sql = "SELECT * FROM typedemande";
         $allTypeDemande = $this->manager->db->query( $sql );
         $listTypeDemande = $allTypeDemande->fetchAll();
-        return $listTypeDemande;
+        return mb_convert_encoding($listTypeDemande, 'UTF-8', 'ISO-8859-1');
     }
 
     public function getPriorite(){
         $sql = "SELECT * FROM priorite";
         $allPriorite = $this->manager->db->query( $sql );
         $listPriorite = $allPriorite->fetchAll();
-        return $listPriorite;
+        return mb_convert_encoding($listPriorite, 'UTF-8', 'ISO-8859-1');
     }
 
     public function createTicket( Ticket $newTicket){
@@ -96,7 +96,7 @@ class TicketManager extends Manager
         $sql .= " ORDER BY $sort $order";
         $sql .= " LIMIT $offset, $limit";
         $response = $this->manager->db->query( $sql );
-        $dataList = $response->fetchAll( \PDO::FETCH_ASSOC );
+        $dataList =  mb_convert_encoding($response->fetchAll( \PDO::FETCH_ASSOC ), 'UTF-8', 'ISO-8859-1');
         $listTickets = [];
         foreach ( $dataList as $data ) {
             $listTickets[] = new Ticket( $data );
@@ -111,7 +111,7 @@ class TicketManager extends Manager
             ':id'    => $idTypeDemande,
         ]);
         $typeDemande = $req->fetch();
-        return mb_convert_encoding($typeDemande['TD_typeDemande'], 'UTF-8');
+        return mb_convert_encoding($typeDemande['TD_typeDemande'], 'UTF-8', 'ISO-8859-1');
     }
 
     public function getPrioriteById(int $idPriorite){
@@ -121,7 +121,7 @@ class TicketManager extends Manager
             ':id' => $idPriorite
         ]);
         $priorite = $req->fetch();
-        return mb_convert_encoding($priorite['PR_priorite'], 'UTF-8');
+        return mb_convert_encoding($priorite['PR_priorite'], 'UTF-8', 'ISO-8859-1');
     }
 
     public function getTicketById( int $idTicket ){
@@ -130,7 +130,7 @@ class TicketManager extends Manager
         $req->execute([
             ':id' => $idTicket
         ]);
-        $dataTicket = $req->fetch(\PDO::FETCH_ASSOC);
+        $dataTicket = mb_convert_encoding($req->fetch(\PDO::FETCH_ASSOC), 'UTF-8', 'ISO-8859-1');
         $ticket = new Ticket( $dataTicket );
         return $ticket;
     }

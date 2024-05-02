@@ -41,7 +41,7 @@ class UserManager extends Manager
         $sql = "SELECT * FROM utilisateur WHERE UT_login=:login";
         $req = $this->manager->db->prepare( $sql );
         $req->execute([':login'=>$login] );
-        $data = $req->fetch(\PDO::FETCH_ASSOC);
+        $data =  mb_convert_encoding($req->fetch(\PDO::FETCH_ASSOC), 'UTF-8', 'ISO-8859-1');
         $connectedUser = new User( $data );
         return $connectedUser;
     }
@@ -86,7 +86,7 @@ class UserManager extends Manager
         $sql .= " ORDER BY $sort $order";
         $sql .= " LIMIT $offset, $limit";
         $response = $this->manager->db->query( $sql );
-        $dataList = $response->fetchAll( \PDO::FETCH_ASSOC );
+        $dataList = mb_convert_encoding($response->fetchAll( \PDO::FETCH_ASSOC ), 'UTF-8', 'ISO-8859-1');
         $listUser = [];
         foreach ( $dataList as $data ) {
             $listUser[] = new User( $data );
@@ -100,7 +100,7 @@ class UserManager extends Manager
         $req->execute([
             ':id' => $idUser
         ]);
-        $data = $req->fetch(\PDO::FETCH_ASSOC);
+        $data = mb_convert_encoding($req->fetch(\PDO::FETCH_ASSOC), 'UTF-8', 'ISO-8859-1');
         $user = new User( $data );
         return $user;
     }
@@ -157,7 +157,7 @@ class UserManager extends Manager
         $sql .= " ORDER BY $sort $order";
         $sql .= " LIMIT $offset, $limit";
         $response = $this->manager->db->query( $sql );
-        $dataList = $response->fetchAll( \PDO::FETCH_ASSOC );
+        $dataList = mb_convert_encoding($response->fetchAll( \PDO::FETCH_ASSOC ), 'UTF-8', 'ISO-8859-1');
         $listUser = [];
         foreach ( $dataList as $data ) {
             $listUser[] = new User( $data );

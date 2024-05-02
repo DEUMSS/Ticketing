@@ -43,7 +43,7 @@ class ClientManager extends Manager
         $sql .= " ORDER BY $sort $order";
         $sql .= " LIMIT $offset, $limit";
         $response = $this->manager->db->query( $sql );
-		$dataList = $response->fetchAll( \PDO::FETCH_ASSOC );
+		$dataList = mb_convert_encoding($response->fetchAll( \PDO::FETCH_ASSOC ), 'UTF-8', 'ISO-8859-1');
         $listUsers = [];
 		foreach ( $dataList as $data ) {
 			$listUsers[] = new Client( $data );
@@ -63,7 +63,7 @@ class ClientManager extends Manager
         $sql = "SELECT * FROM client WHERE CI_login=:login";
         $req = $this->manager->db->prepare( $sql );
         $req->execute([':login'=>$login] );
-        $data = $req->fetch(\PDO::FETCH_ASSOC);
+        $data = mb_convert_encoding($req->fetch(\PDO::FETCH_ASSOC), 'UTF-8', 'ISO-8859-1');
         $connectedClient = new Client( $data );
         return $connectedClient;
     }
@@ -73,7 +73,7 @@ class ClientManager extends Manager
         $sql = "SELECT * FROM client WHERE CI_id=:id";
         $req = $this->manager->db->prepare( $sql );
         $req->execute([':id'=>$idClient] );
-        $data = $req->fetch(\PDO::FETCH_ASSOC);
+        $data = mb_convert_encoding($req->fetch(\PDO::FETCH_ASSOC), 'UTF-8', 'ISO-8859-1');
         $connectedClient = new Client( $data );
         return $connectedClient;
     }
@@ -94,48 +94,6 @@ class ClientManager extends Manager
 		]);
 		return $state;
 	}
-
-
-    public function setClient( int $id, int $isActive ): bool
-    {
-        $sql = 'UPDATE client SET CI_actif=:isActive WHERE CI_id=:id';
-        $req = $this->manager->db->prepare( $sql );
-		$state = $req->execute([
-            ':isActive'     => $isActive,
-			':id'           => $id
-		]);
-        return $state;
-    }
-
-    /*
-    public function isUserAdmin(): bool
-    {
-        $sql = 'SELECT CI_id FROM client WHERE isAdmin=1';
-        $req = $this->manager->db->query( $sql );
-		if($id = current($req->fetch())){
-            $sql = 'UPDATE users SET isAdmin=0 WHERE id=:id';
-            $req = $this->manager->db->prepare( $sql );
-            return $req->execute([
-                ':id'       => $id
-            ]);
-        } else return true;
-    }
-    */
-    /*
-    public function setUserAdmin( int $id, int $isAdmin): bool
-    {
-        if(!$this->isUserAdmin()){
-            return false;
-        }
-        $sql = 'UPDATE users SET isAdmin=:isAdmin WHERE id=:id';
-        $req = $this->manager->db->prepare( $sql );
-		$state = $req->execute([
-            ':isAdmin'  => $isAdmin,
-			':id'       => $id
-		]);
-        return $state;
-    }
-    */
 
     public function updateClient( Client $client ) : ?bool 
     {
@@ -221,7 +179,7 @@ class ClientManager extends Manager
         $sql .= " ORDER BY $sort $order";
         $sql .= " LIMIT $offset, $limit";
         $response = $this->manager->db->query( $sql );
-        $dataList = $response->fetchAll( \PDO::FETCH_ASSOC );
+        $dataList =  mb_convert_encoding($response->fetchAll( \PDO::FETCH_ASSOC ), 'UTF-8', 'ISO-8859-1');
         $listClient = [];
         foreach ( $dataList as $data ) {
             $listClient[] = new Client( $data );
