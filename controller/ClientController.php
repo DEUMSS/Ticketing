@@ -113,6 +113,10 @@ class ClientController extends Controller
                 }
             }else{
                 $connectedUser = $this->userManager->getUser( $_POST['login'] );
+                $roleUser = $connectedUser->getUT_role();
+                if($roleUser == "ADMIN"){
+                    $_SESSION['roleUser'] = $roleUser;
+                }
                 if(sodium_crypto_pwhash_str_verify( $connectedUser->getUT_password(), $_POST['password'] ) ) {
                     $_SESSION['idUser'] = $connectedUser->getUT_id();
                     header('Location:' . $this->pathRoot . 'Ticket/list');

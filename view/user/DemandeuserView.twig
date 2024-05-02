@@ -2,27 +2,11 @@
 
 {%  block body %}
 
-  <h2>Liste des utilisateurs</h2>
+  <h2>Liste des demandes pour devenir un membre du personnel</h2>
 
   {% if resultat is defined %}
     <p class="alert {{ resultat }}">{{ message }}</p>
   {% endif %}
-
-    <div class="container">
-      <div class="col-row mt-3">
-        <div class="col-6">
-          <button class="btn btn-primary mr-2" id="btnUserActif" 
-          data-url="{{ pathRoot ~ 'user/listuserBS' }}"
-          data-field="actif"
-          data-val="0"><i class="fa-solid fa-lock-open"></i>Utilisateurs actifs</button>
-          <button class="btn btn-secondary mr-2" id="btnUserInactif" 
-          data-url="{{ pathRoot ~ 'user/listuserBS' }}"
-          data-field="inactif"
-          data-val="0"><i class="fa-solid fa-lock"></i>Utilsateurs inactifs</button>
-        </div>
-      </div>
-    </div>
-
   
   <div class="row mt-3">
       <div class="col-12">
@@ -30,14 +14,13 @@
                 class="table"
                 id="table"
                 data-toggle="table"
-                data-url="{{ pathRoot ~ 'user/listuserBS' }}"
+                data-url="{{ pathRoot ~ 'user/demandeuserBS' }}"
                 data-ajax="ajaxRequest"
                 data-search="true"
                 data-searchable="true"
                 data-side-pagination="server"
                 data-sortable="true"
                 data-pagination="true"
-                data-query-params="queryParams"
                 data-page-size="5">
             <thead>
             <tr>
@@ -83,19 +66,10 @@
       // your custom ajax request here
       function ajaxRequest(params) {
         const url = $('#table').data('url')
-        console.log(url);
         $.get(url + '/?' + $.param(params.data))
           .then(function (res) {
             params.success( JSON.parse(res) )
           })
-      }
-
-      function queryParams( params ) {
-        params.actif = document.querySelector('#btnUserActif').dataset.val
-        params.inactif = document.querySelector('#btnUserInactif').dataset.val
-        document.querySelector('#btnUserActif').dataset.val = 0
-        document.querySelector('#btnUserInactif').dataset.val = 0
-        return params
       }
 
       window.onload = () => {
@@ -112,26 +86,7 @@
 
       function actionFormatter(value, row) 
       {
-        return '<a class="btn btn-sm btn-primary" href="{{ pathRoot ~ 'user/updateuser/id/' }}' + row.UT_id + '"> Voir le profil </a>'
-      }
-
-
-      function activeFormatter(value, row)
-      {
-        const isChecked = value == 1 ? 'checked' : ''
-        const isActif = value == false ? 0 : 1
-        return ['<div class="form-check form-switch">',
-              '<input class="form-check-input active-line" data-isactif="' + isActif + '" data-url="{{ pathRoot ~ 'users/setuserBS/id/' }}' + row.id + '/isactif/" type="checkbox" role="switch" id="flexSwitchCheckChecked" ' + isChecked + '>',
-              '</div>'].join('')
-      }
-
-      function adminFormatter(value, row)
-      {
-        const isChecked = value == 1 ? 'checked' : ''
-        const isAdmin = value == true ? 0 : 1
-        return ['<div class="form-check form-switch">',
-              '<input class="form-check-input admin-line" data-isadmin="' + isAdmin + '" data-url="{{ pathRoot ~ 'users/setadmin/id/' }}' + row.id + '/isadmin/" type="checkbox" role="switch" id="flexSwitchCheckChecked" ' + isChecked + '>',
-              '</div>'].join('')
+        return '<a class="btn btn-sm btn-primary" href="{{ pathRoot ~ 'user/validdemandeuser/id/' }}' + row.UT_id + '/login/' + row.UT_login + '"> Autoriser </a>'
       }
 
     </script>

@@ -97,7 +97,7 @@ class UserController extends Controller
                     'UT_nom'            => $user->getUT_nom(),
                     'UT_login'          => $user->getUT_login(),
                     'UT_dateCrea'       => $user->getUT_dateCrea(),
-                    'UT_actif'          => $user->getUT_actif() ? "Ouvert" : "Fermé",
+                    'UT_actif'          => $user->getUT_actif() ? "Actif" : "Inactif",
                     'UT_role'           => $user->getUT_role()
                 ];
             }
@@ -113,4 +113,165 @@ class UserController extends Controller
             $this->render('user/listuser', $data );
         }
     }
+
+    public function updateuserAction( array $data=[] ){
+        if(isset($this->vars['id']) || isset($_SESSION['idUserMaj']) ){
+            if(isset( $this->vars['id'])){
+                $_SESSION['idUserMaj'] = $this->vars['id'];
+            }
+            $user = $this->userManager->getUserById(  $_SESSION['idUserMaj'] );
+            if(isset($user)){
+                $data['user'] = $user;
+                $this->render('user/updateuser', $data );
+            }else{
+                $data = [
+                'resultat'  => 'alert-danger',
+                'message'   => 'Une erreur est survenue lors de la récupération des infomations du compte'
+            ];
+            $this->render('user/listuser', $data);    
+            }
+        }else{
+            $data = [
+            'resultat'  => 'alert-danger',
+            'message'   => 'Une erreur est survenue lors de la récupération de l\'id du compte'
+        ];
+        $this->render('user/listuser', $data);
+        }
+    }
+
+    public function updateroleAction(){
+        if( $_POST['role'] == 'ADMIN' || $_POST['role'] == 'PERSONNEL'){
+            if(isset($_SESSION['idUserMaj'])){
+                $data = [
+                    'idUser' => $_SESSION['idUserMaj'],
+                    'role'   =>$_POST['role']
+                ];
+                $state = $this->userManager->updateRole( $data );
+                if($state){
+                    $data = [
+                        'resultat' => 'alert-success',
+                        'message'  => 'Le role du compte à bien était modifié'
+                    ];
+                    $this->render('user/listuser', $data);
+                }else{
+                    $data['resultat'] = 'alert-danger';
+                    $data['message']  = 'Une erreur c\'est produite lors de la modification du role';
+                    $this->render('user/updateuser', $data);
+                }
+            }    
+        }else{
+            $data['resultat'] = 'alert-danger';
+            $data['message']  = 'Le rôle saisie est incorrect, veuillez réessayer';
+            $this->updateuserAction( $data );
+        }
+    }
+
+    public function desactiveuserAction(){
+        $state = $this->userManager->desactiveUser( $this->vars['id'] );
+        if( !$state ){
+            $data = [
+                'resultat' => 'alert-danger',
+                'message' => 'Une erreur c\'est produite lors de la cloturation du compte'
+            ];
+            $this->render('user/updateuser', $data);
+        }else{
+            $data = [
+                'resultat' => 'alert-success',
+                'message' => 'Le compte a bien était rendu inactif'
+            ];
+            $this->render('user/listuser', $data);
+        }
+    }
+
+    public function activeuserAction(){
+        $state = $this->userManager->activeUser( $this->vars['id'] );
+        if( !$state ){
+            $data = [
+                'resultat' => 'alert-danger',
+                'message' => 'Une erreur c\'est produite lors de la cloturation du compte'
+            ];
+            $this->render('user/updateuser', $data);
+        }else{
+            $data = [
+                'resultat' => 'alert-success',
+                'message' => 'Le compte a bien était rendu inactif'
+            ];
+            $this->render('user/listuser', $data);
+        }
+    }
+
+    public function demandeuserAction(){
+        $data = [];
+        $this->render('user/demandeuser', $data);
+    }
+
+    public function demandeuserBSAction(){
+        if(isset($_SESSION['idUser'])){
+            $searchParams = [
+                'search'		=> $this->vars['search'],
+                'sort'			=> $this->vars['sort'],
+                'order'			=> $this->vars['order'],
+                'offset'		=> $this->vars['offset'],
+                'limit'			=> $this->vars['limit'],
+                'searchable'	=> $this->vars['searchable'],
+            ];
+            
+            $listDemandeUser = $this->userManager->listDemandeUser( $searchParams );
+            $searchParams['offset'] = "";
+            $searchParams['limit'] = "";
+            $nbDemandeUser = count($this->userManager->listDemandeUser($searchParams));
+    
+            $dataBs = [];
+            foreach( $listDemandeUser as $user ) {
+                $dataBs[] = [
+                    'UT_id'             => $user->getUT_id(),
+                    'UT_prenom'         => $user->getUT_prenom(),
+                    'UT_nom'            => $user->getUT_nom(),
+                    'UT_login'          => $user->getUT_login(),
+                    'UT_dateCrea'       => $user->getUT_dateCrea(),
+                    'UT_actif'          => $user->getUT_actif() ? "Actif" : "Inactif",
+                    'UT_role'           => $user->getUT_role()
+                ];
+            }
+    
+            $data = [
+                "rows"      => $dataBs,
+                "total"     => $nbDemandeUser
+            ];
+            $jsData = json_encode( $data );
+            echo $jsData;
+        }else{
+            $data=[];
+            $this->render('user/demandeuser', $data );
+        }
+    }
+
+    public function validdemandeuserAction(){
+        if(isset($this->vars['id']) && isset($this->vars['login'])){
+            $state = $this->userManager->activeUser($this->vars['id']);
+            if($state){
+                $state = $this->clientManager->desactiveClientByLogin($this->vars['login']);
+                if($state){
+                    $data = [
+                        'resultat' => 'alert-success',
+                        'message'  => 'La demande a bien était accepté'
+                    ];
+                    $this->render('user/demandeuser', $data);
+                }else{
+                    $data = [
+                        'resultat' => 'alert-danger',
+                        'message'  => 'Une erreur est survenue lors de la désactivation du compte client'
+                    ];
+                    $this->render('user/demandeuser', $data);
+                }
+            }else{
+                $data = [
+                    'resultat' => 'alert-danger',
+                    'message'  => 'Une erreur est survenue lors de l\'activation du compte utilisateur'
+                ];
+                $this->render('user/demandeuser', $data);
+            }
+        }
+    }
+
 }

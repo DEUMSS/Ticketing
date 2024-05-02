@@ -109,6 +109,10 @@ class Client
 	{
 		return $this->CI_dateCrea->format('d/m/Y');
 	}
+    public function getCI_dateCreaSQL()
+	{
+		return $this->CI_dateCrea->format('Y-m-d');
+	}
     public function getCI_entreprise(){
         return $this->CI_entreprise;
     }

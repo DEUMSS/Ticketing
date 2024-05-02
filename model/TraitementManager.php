@@ -15,13 +15,12 @@ class TraitementManager extends manager{
         $req->execute([
             ':id' => $idTicket
         ]);
-        $data = $req->fetch(\PDO::FETCH_ASSOC);
-        if( $data){
-            $traitement = new Traitement( $data );
-            return $traitement;    
-        }else{
-            return false;
-        }
+        $data = $req->fetchAll(\PDO::FETCH_ASSOC);
+        $traitements = [];
+		foreach ( $data as $traitement ) {
+            $traitements[] = new Traitement( $traitement );
+		}
+        return $traitements;
     }
 
     public function createTraitement(array $data){

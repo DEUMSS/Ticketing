@@ -38,7 +38,10 @@
                                 <a class="nav-link" href="{{ pathRoot ~ 'client/logout' }}">Déconnexion</a>
                             {% elseif session.idUser is defined %}
                                 <a class="nav-link" href="{{ pathRoot ~ 'client/listclient' }}">Voir les comptes client</a>
-                                <a class="nav-link" href="{{ pathRoot ~ 'user/listuser' }}"> Voir les comptes utilisateur</a>
+                                {% if session.roleUser is defined %}
+                                    <a class="nav-link" href="{{ pathRoot ~ 'user/listuser' }}"> Voir les comptes utilisateur</a>
+                                    <a class="nav-link" href="{{ pathRoot ~ 'user/demandeuser' }}"> Demandes pour devenir membre</a> 
+                                {% endif %}
                                 <a class="nav-link" href="{{ pathRoot ~ 'client/logout' }}">Déconnexion</a>
                             {% else %}
                                 <a class="nav-link" href="{{ pathRoot ~ 'client/connection' }}">Connexion</a>

@@ -31,7 +31,7 @@ class TicketManager extends Manager
             ':idTypeDemande'    => $newTicket->getTI_idTypeDemande(),
             ':idPriorite'       => $newTicket->getTI_idPriorite(),
             ':sujet'            => $newTicket->getTI_sujet(),
-            ':message'          => $newTicket->getTI_messagee(),
+            ':message'          => $newTicket->getTI_message(),
             ':actif'            => true,
             ':dateCrea'         => date('Y-m-d H:i:s'),
             ':dateMAJ'          => date('Y-m-d H:i:s')
@@ -54,7 +54,7 @@ class TicketManager extends Manager
                     $searchItem = "typedemande.TD_typeDemande";
                 }
                 if ($searchItem == "priorite"){
-                    $searchItem = "priorite.PR_priorite";
+                    $searchItem = "priorite.PR_priorite";   
                 }
                 $search = $params['search'];
                 $strLike .= $searchItem . " LIKE '%$search%' OR ";
@@ -78,10 +78,12 @@ class TicketManager extends Manager
             }
         }
         $sqlFerme = false;
-        if ($params['ferme']){
-            $sqlFerme = "ticket.TI_actif = 0";
-        } elseif ($params['ouvert']){
-            $sqlFerme = "ticket.TI_actif = 1";
+        if(isset($_SESSION['roleUser'])){
+            if ($params['ferme']){
+                $sqlFerme = "ticket.TI_actif = 0";
+            } elseif ($params['ouvert']){
+                $sqlFerme = "ticket.TI_actif = 1";
+            }
         }
         if ($sqlFerme){
             if ($reqWhereUse){

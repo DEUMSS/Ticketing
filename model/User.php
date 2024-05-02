@@ -103,9 +103,13 @@ class User
     {
         return $this->UT_prenom;
     }
-    public function getUT_dateCrea(): ?\DateTimeImmutable
+    public function getUT_dateCrea()
 	{
-		return $this->UT_dateCrea;
+		return $this->UT_dateCrea->format('d/m/Y');
+	}
+    public function getUT_dateCreaSQL()
+	{
+		return $this->UT_dateCrea->format('Y-m-d');
 	}
     public function getUT_role(){
         return $this->UT_role;

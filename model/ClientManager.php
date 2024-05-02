@@ -146,7 +146,7 @@ class ClientManager extends Manager
             ':nom'          => $client->getCI_nom(),
             ':prenom'       => $client->getCI_prenom(),
             ':entreprise'   => $client->getCI_entreprise(),
-            ':dateCrea'     => $client->getCI_dateCrea(),
+            ':dateCrea'     => $client->getCI_dateCreaSQL(),
             ':actif'        => $client->getCI_actif()
         ]);
         return $state;
@@ -172,7 +172,7 @@ class ClientManager extends Manager
             ':nom'          => $newClient->getCI_nom(),
             ':prenom'       => $newClient->getCI_prenom(),
             ':entreprise'   => $newClient->getCI_entreprise(),
-            ':dateCrea'     => $newClient->getCI_dateCrea(),
+            ':dateCrea'     => $newClient->getCI_dateCreaSQL(),
             ':actif'        => true
         ]);
         if( $state ) {
@@ -243,6 +243,15 @@ class ClientManager extends Manager
         $req = $this->manager->db->prepare($sql);
         $state = $req->execute([
             ':id' => $idClient
+        ]);
+        return $state;
+    }
+
+    public function desactiveClientByLogin( string $loginClient ){
+        $sql = "UPDATE client SET CI_actif = 0 WHERE CI_login = :login";
+        $req = $this->manager->db->prepare($sql);
+        $state = $req->execute([
+            ':login' => $loginClient
         ]);
         return $state;
     }

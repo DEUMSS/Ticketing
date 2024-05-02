@@ -9,6 +9,7 @@ class Traitement{
     protected $TM_id;
     protected $TM_idTicket;
     protected $TM_message;
+    protected $TM_dateMessage;
 
     public function __construct( array $data )
     {
@@ -36,15 +37,19 @@ class Traitement{
     public function setTM_id( $id ){
         $this->TM_id = $id;
     }
-
     public function setTM_idTicket( $idTicket ){
         $this->TM_idTicket = $idTicket;
     }
-    
     public function setTM_message( $message ){
         $this->TM_message = $message;
     }
+    public function setTM_dateMessage( ?\DateTimeImmutable $dateTime ){
+        $this->TM_dateMessage = $dateTime;
+    }
 
+    public function getTM_dateMessage(){
+        return $this->TM_dateMessage->format('d/m/Y');
+    }
     public function getTM_id(){
         return $this->TM_id;
     }
@@ -53,7 +58,7 @@ class Traitement{
         return $this->TM_idTicket;
     }
 
-    public function getTM_messagee(){
+    public function getTM_message(){
         return $this->TM_message;
     }
 }

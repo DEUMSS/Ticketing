@@ -51,26 +51,26 @@
                 <p>Messages :</p>
                 <textarea class="form-control" style="height: 100px" disabled>{{ ticket.TI_message }}</textarea>
             </div>
-
-
-            {% for message in traitement %}
+            {% for traitement in traitements %}
                 <div class="form-floating mb-3">
-                <p>Le : {{ message.TM_dateMessage }}
-                    <textarea class="form-control" style="height: 100px" disabled>{{ message.TM_message }}</textarea>
+                    <p>Le : {{ traitement.TM_dateMessage }}</p>
+                    <textarea class="form-control" style="height: 100px" disabled>{{ traitement.TM_message }}</textarea>
                 </div>
             {% endfor %}
 
-            <form action="{{ pathRoot ~ 'ticket/sendmessage' }}" name="updateForm" method="post">
-                <div class="form-floating">
-                    <textarea id="newMessage" name="newMessage" class="form-control" style="height: 100px" required></textarea>
-                    <label for="newMessage">Répondre :</label>
-                </div>
-                <div class="row mt-5 justify-content-end" style="display: flex;">
-                    <div class="col-1">
-                        <button type="submit" class="btn btn-primary mb-5">Envoyer</button>
+            {% if ticket.TI_actif == true %}
+                <form action="{{ pathRoot ~ 'ticket/sendmessage' }}" name="updateForm" method="post">
+                    <div class="form-floating">
+                        <textarea id="newMessage" name="newMessage" class="form-control" style="height: 100px" required></textarea>
+                        <label for="newMessage">Répondre :</label>
                     </div>
-                </div>
-            </form>
+                    <div class="row mt-5 justify-content-end" style="display: flex;">
+                        <div class="col-1">
+                            <button type="submit" class="btn btn-primary mb-5">Envoyer</button>
+                        </div>
+                    </div>
+                </form>
+            {% endif %}
         </div>
     </div>
 

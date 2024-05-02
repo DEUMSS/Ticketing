@@ -1,0 +1,66 @@
+{% extends 'Pagelayout.twig' %}
+
+{%  block body %}
+
+    {% if resultat is defined %}
+        <p class="alert {{ resultat }}">{{ message }}</p>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-6">
+            <h2>Informations du compte<h2>
+        </div>
+        <div class="container justify-content-end col-6 mt-2" style="display: flex;">
+            {% if user.UT_actif == true %}
+                <a class="btn btn-warning" href="{{ pathRoot ~ 'user/desactiveuser/id/' ~ user.UT_id }}">Désactivé le compte</a>
+            {% elseif user.UT_actif == false %}
+                <a class="btn btn-success" href="{{ pathRoot ~ 'user/activeuser/id/' ~ user.UT_id }}">Activé le compte</a>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <div class="row mt-5 justify-content-center" style="display: flex;">
+        <div class="col-8">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="sujet">Nom :</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="sujet" placeholder="{{user.UT_nom}}" disabled>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="sujet">Prénom :</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="sujet" placeholder="{{user.UT_prenom}}" disabled>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="sujet">Loign :</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="sujet" placeholder="{{user.UT_login}}" disabled>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="sujet">Compte créé le :</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="sujet" placeholder="{{ user.UT_dateCrea }}" disabled>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="sujet">Etat du compte :</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="sujet" placeholder="{{user.UT_actif ? "Actif" : "Inactif"}}" disabled>
+            </div>
+
+            <p class="text-center"><i>Pour changer le role du compte taper ADMIN ou PERSONNEL</i></p>
+            <form action="{{ pathRoot ~ 'user/updaterole' }}" name="updateForm" method="post">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="role">Rôle :</span>
+                    <input type="text" class="form-control" id="role" name="role" placeholder="{{user.UT_role}}">
+                </div>
+                <div class="row mt-5 justify-content-end" style="display: flex;">
+                    <div class="col-1">
+                        <button type="submit" class="btn btn-primary mb-5">Envoyer</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+{% endblock %}

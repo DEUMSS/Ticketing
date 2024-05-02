@@ -58,7 +58,7 @@ class Ticket{
     public function getTI_sujet(){
         return $this->TI_sujet;
     }
-    public function getTI_messagee(){
+    public function getTI_message(){
         return $this->TI_message;
     }
     public function getTI_actif(){

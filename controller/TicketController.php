@@ -42,9 +42,12 @@ class TicketController extends Controller
                 'offset'		=> $this->vars['offset'],
                 'limit'			=> $this->vars['limit'],
                 'searchable'	=> $this->vars['searchable'],
-                'ferme'         => $this->vars['ferme'] == 1,
-                'ouvert'        => $this->vars['ouvert'] == 1
             ];
+
+            if(isset($_SESSION['roleUser'])){
+                $searchParams['ferme'] = $this->vars['ferme'] == 1;
+                $searchParams['ouvert'] = $this->vars['ouvert'] == 1;
+            }
             
             $listTicket = $this->ticketManager->listTicket( $searchParams );
             $searchParams['offset'] = "";
@@ -113,16 +116,13 @@ class TicketController extends Controller
             $_SESSION['idTicket'] = $this->vars['id'];
             $ticket = $this->ticketManager->getTicketById( $this->vars['id']);
             if(isset($ticket)){
-                $traitement = $this->traitementManager->getMessageByIdTicket( $ticket->getTI_id());
-                if( !$traitement ){
-                    $traitement = null;
-                }
+                $traitements = $this->traitementManager->getMessageByIdTicket( $ticket->getTI_id());
                 $typeDemande = $this->ticketManager->getTypeDemandeById($ticket->getTI_idTypeDemande());
                 $priorite = $this->ticketManager->getPrioriteById($ticket->getTI_idPriorite());
                 $data['ticket'] = $ticket;
                 $data['typeDemande'] = $typeDemande;
                 $data['priorite'] = $priorite;
-                $data['traitement'] = $traitement;
+                $data['traitements'] = $traitements;
                 $this->render('ticket/updateticket', $data );
             }else{
                 $data = [
