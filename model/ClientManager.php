@@ -51,13 +51,6 @@ class ClientManager extends Manager
         return $listUsers;
     }
 
-
-    /**
-     * Return user object
-     * 
-     * @param int $id
-     * @return false|Users
-     */
     public function getClient( string $login )
     {
         $sql = "SELECT * FROM client WHERE CI_login=:login";
@@ -77,23 +70,6 @@ class ClientManager extends Manager
         $connectedClient = new Client( $data );
         return $connectedClient;
     }
-
-
-    /**
-     * Undocumented function
-     *
-     * @param integer $id
-     * @return integer
-     */
-	public function deleteClient( int $id ): int
-	{
-		$sql = "DELETE FROM client WHERE id=:id";
-		$req = $this->manager->db->prepare( $sql );
-		$state = $req->execute([
-			':id'  => $id
-		]);
-		return $state;
-	}
 
     public function updateClient( Client $client ) : ?bool 
     {

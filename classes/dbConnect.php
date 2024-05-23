@@ -1,5 +1,5 @@
 <?php
-namespace projetVierge\classes;
+namespace ticketing\classes;
 
 use PDO;
 

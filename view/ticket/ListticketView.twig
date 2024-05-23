@@ -2,87 +2,88 @@
 
 {%  block body %}
 
+  {% if session.idUser is defined or session.idClient is defined %}
+    <h2>Vos ticket(s)</h2>
 
-  <h2>Vos ticket(s)</h2>
-
-  {% if resultat is defined %}
-      <p class="alert {{ resultat }}">{{ message }}</p>
-  {% endif %}
+    {% if resultat is defined %}
+        <p class="alert {{ resultat }}">{{ message }}</p>
+    {% endif %}
 
 
-
-  {% if session.roleUser is defined%}
-    <div class="container">
-      <div class="col-row mt-3">
-        <div class="col-6">
-          <button class="btn btn-primary mr-2" id="btnTicketOuvert" 
-          data-url="{{ pathRoot ~ 'ticket/listticketBS' }}"
-          data-field="ouvert"
-          data-val="0"><i class="fa-solid fa-lock-open"></i>Tickets ouverts</button>
-          <button class="btn btn-secondary mr-2" id="btnTicketFerme" 
-          data-url="{{ pathRoot ~ 'ticket/listticketBS' }}"
-          data-field="ferme"
-          data-val="0"><i class="fa-solid fa-lock"></i>Tickets fermés</button>
+    {% if session.roleUser is defined%}
+      <div class="container">
+        <div class="col-row mt-3">
+          <div class="col-6">
+            <button class="btn btn-primary mr-2" id="btnTicketOuvert" 
+            data-url="{{ pathRoot ~ 'ticket/listticketBS' }}"
+            data-field="ouvert"
+            data-val="0"><i class="fa-solid fa-lock-open"></i>Tickets ouverts</button>
+            <button class="btn btn-secondary mr-2" id="btnTicketFerme" 
+            data-url="{{ pathRoot ~ 'ticket/listticketBS' }}"
+            data-field="ferme"
+            data-val="0"><i class="fa-solid fa-lock"></i>Tickets fermés</button>
+          </div>
         </div>
       </div>
+    {% endif %}
+
+    <div class="row mt-3">
+        <div class="col-12">
+            <table
+                  class="table"
+                  id="table"
+                  data-toggle="table"
+                  data-url="{{ pathRoot ~ 'ticket/listticketBS' }}"
+                  data-ajax="ajaxRequest"
+                  data-search="true"
+                  data-searchable="true"
+                  data-side-pagination="server"
+                  data-sortable="true"
+                  data-pagination="true"
+                  {% if session.roleUser is defined %}
+                    data-query-params="queryParams"
+                  {% endif %}
+                  data-page-size="5">
+              <thead>
+              <tr>
+                  <th data-field="TI_id" 
+                      data-searchable="false"
+                      data-sortable="true"
+                  >N°</th>
+                  <th data-field="TI_idTypeDemande" 
+                  data-searchable="true"
+                  data-sortable="true"
+                  >Demande</th>
+                  <th data-field="TI_idPriorite" 
+                  data-searchable="true"
+                  data-sortable="true"
+                  >Priorité</th>
+                  <th data-field="TI_sujet" 
+                      data-searchable="true"
+                      data-sortable="false"
+                  >Sujet</th>
+                  <th data-field="TI_dateCrea" 
+                      data-searchable="true"
+                      data-sortable="true"
+                  >Date de création</th>
+                    <th data-field="TI_dateMAJ" 
+                      data-searchable="true"
+                      data-sortable="true"
+                  >Date de modification</th>
+                  <th data-field="TI_actif" 
+                      data-searchable="false"
+                  >Etat</th>
+                  <th data-field="action" 
+                      data-searchable="false"
+                      data-formatter="actionFormatter"
+                  >Action</th>
+              </tr>
+              </thead>
+            </table>
+        </div>
     </div>
   {% endif %}
-
-  <div class="row mt-3">
-      <div class="col-12">
-          <table
-                class="table"
-                id="table"
-                data-toggle="table"
-                data-url="{{ pathRoot ~ 'ticket/listticketBS' }}"
-                data-ajax="ajaxRequest"
-                data-search="true"
-                data-searchable="true"
-                data-side-pagination="server"
-                data-sortable="true"
-                data-pagination="true"
-                {% if session.roleUser is defined %}
-                  data-query-params="queryParams"
-                {% endif %}
-                data-page-size="5">
-            <thead>
-            <tr>
-                <th data-field="TI_id" 
-                    data-searchable="false"
-                    data-sortable="true"
-                >N°</th>
-                <th data-field="TI_idTypeDemande" 
-                data-searchable="true"
-                data-sortable="true"
-                >Demande</th>
-                <th data-field="TI_idPriorite" 
-                data-searchable="true"
-                data-sortable="true"
-                >Priorité</th>
-                <th data-field="TI_sujet" 
-                    data-searchable="true"
-                    data-sortable="false"
-                >Sujet</th>
-                <th data-field="TI_dateCrea" 
-                    data-searchable="true"
-                    data-sortable="true"
-                >Date de création</th>
-                  <th data-field="TI_dateMAJ" 
-                    data-searchable="true"
-                    data-sortable="true"
-                >Date de modification</th>
-                <th data-field="TI_actif" 
-                    data-searchable="false"
-                >Etat</th>
-                <th data-field="action" 
-                    data-searchable="false"
-                    data-formatter="actionFormatter"
-                >Action</th>
-            </tr>
-            </thead>
-          </table>
-      </div>
-  </div>
+  
   <script>
 
     // your custom ajax request here

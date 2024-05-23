@@ -33,7 +33,13 @@ class ClientController extends Controller
                 if(empty($isClientUser)){
                     $data['clientIsUser'] = false;
                 }else{
-                    $data['clientIsUser'] = true;
+                    $userAccount = new User($isClientUser);
+                    $isUserActiv = $userAccount->getUT_actif();
+                    if( $isUserActiv == false ){
+                        $data['clientIsUser'] = false;
+                    }else{
+                        $data['clientIsUser'] = true;
+                    }
                 }
                 $data['client'] = $client;
                 $this->render('client/updateclient', $data );
@@ -271,7 +277,7 @@ class ClientController extends Controller
         }else{
             $data = [
                 'resultat' => 'alert-success',
-                'message' => 'Le compte a bien était rendu inactif'
+                'message' => 'Le compte a bien été rendu inactif'
             ];
             $this->render('client/listclient', $data);
         }
@@ -288,7 +294,7 @@ class ClientController extends Controller
         }else{
             $data = [
                 'resultat' => 'alert-success',
-                'message' => 'Le compte a bien était réouvert'
+                'message' => 'Le compte a bien été réouvert'
             ];
             $this->render('client/listclient', $data);
         }

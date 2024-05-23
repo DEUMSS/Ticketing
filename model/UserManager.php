@@ -10,7 +10,7 @@ class UserManager extends Manager
     }
 
     public function isAccountUsed( String $login ){
-        $sql = "SELECT * FROM utilisateur WHERE UT_login=:login AND UT_actif=1";
+        $sql = "SELECT * FROM utilisateur WHERE UT_login=:login";
         $req = $this->manager->db->prepare( $sql );
         $req->execute([
             ':login'    => $login,

@@ -45,22 +45,22 @@ class UserController extends Controller
                 'resultat' => false,
                 'message'  => 'Vous avez déjà fait une demande pour devenir membre'
             ];
-            $this->render( 'client/registeruser', $data );
+            $this->render('client/registeruser', $data);
             exit;
         }
         $state = $this->userManager->createUser( $newUser );
         if( $state ){
             $data = [
                 'resultat' => true,
-                'message' => 'Votre demande pour devnir membre à bien était enregistré'
+                'message' => 'Votre demande pour devnir membre a bien été enregistré'
             ];
-            $this->render('Client/registeruser', $data);
+            $this->render('client/registeruser', $data);
         }else{
             $data = [
                 'resultat'  => false,
                 'message'   => 'Une erreur c\'est produite lors de la création de votre compte'
             ];
-            $this->render( 'Client/registeruser', $data );
+            $this->render('client/registeruser', $data);
         }
     }
 
@@ -148,7 +148,7 @@ class UserController extends Controller
                 if($state){
                     $data = [
                         'resultat' => 'alert-success',
-                        'message'  => 'Le role du compte à bien était modifié'
+                        'message'  => 'Le role du compte a bien été modifié'
                     ];
                     $this->render('user/listuser', $data);
                 }else{
@@ -175,7 +175,7 @@ class UserController extends Controller
         }else{
             $data = [
                 'resultat' => 'alert-success',
-                'message' => 'Le compte a bien était rendu inactif'
+                'message' => 'Le compte a bien été rendu inactif'
             ];
             $this->render('user/listuser', $data);
         }
@@ -192,7 +192,7 @@ class UserController extends Controller
         }else{
             $data = [
                 'resultat' => 'alert-success',
-                'message' => 'Le compte a bien était rendu inactif'
+                'message' => 'Le compte a bien été rendu inactif'
             ];
             $this->render('user/listuser', $data);
         }
@@ -252,7 +252,7 @@ class UserController extends Controller
                 if($state){
                     $data = [
                         'resultat' => 'alert-success',
-                        'message'  => 'La demande a bien était accepté'
+                        'message'  => 'La demande a bien été accepté'
                     ];
                     $this->render('user/demandeuser', $data);
                 }else{

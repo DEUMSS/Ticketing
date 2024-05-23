@@ -92,7 +92,7 @@ class TicketController extends Controller
         if( $state ){
             $data = [
                 'resultat'  => 'alert-success',
-                'message'   => 'Votre ticket à bien était créé !'
+                'message'   => 'Votre ticket a bien été créé !'
             ];
             $this->render('ticket/listticket', $data);
         }else{
@@ -151,7 +151,7 @@ class TicketController extends Controller
         if($state1 && $state2){
             $data = [
                 'resultat' => 'alert-success',
-                'message' => 'Votre réponse à était enregistrée'
+                'message' => 'Votre réponse a été enregistrée'
             ];
             $this->render('ticket/listticket', $data);
         }else{
@@ -174,7 +174,7 @@ class TicketController extends Controller
         }else{
             $data = [
                 'resultat' => 'alert-success',
-                'message' => 'Votre ticket a bien était fermé'
+                'message' => 'Votre ticket a bien été fermé'
             ];
             $this->render('ticket/listticket', $data);
         }
@@ -191,7 +191,7 @@ class TicketController extends Controller
         }else{
             $data = [
                 'resultat' => 'alert-success',
-                'message' => 'Votre ticket a bien était ouvert'
+                'message' => 'Votre ticket a bien été ouvert'
             ];
             $this->render('ticket/listticket', $data);
         }

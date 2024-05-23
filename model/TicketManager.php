@@ -62,8 +62,8 @@ class TicketManager extends Manager
             $strLike = trim( $strLike, ' OR ' );
         }
         $sql = "SELECT ticket.*, typedemande.TD_id AS Type, priorite.PR_id AS Priority FROM ticket 
-            INNER JOIN typedemande ON ticket.TI_idTypeDemande = typedemande.TD_id 
-            INNER JOIN priorite ON ticket.TI_idPriorite = priorite.PR_id";
+                INNER JOIN typedemande ON ticket.TI_idTypeDemande = typedemande.TD_id 
+                INNER JOIN priorite ON ticket.TI_idPriorite = priorite.PR_id";
         $reqWhereUse = false;
         if (isset($_SESSION['idClient'])){
             $sql .= " WHERE TI_idClient = " . $_SESSION['idClient'];

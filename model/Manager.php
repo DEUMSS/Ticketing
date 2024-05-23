@@ -2,7 +2,7 @@
 
 namespace ticketing\model;
 
-use projetVierge\classes\dbConnect;
+use ticketing\classes\dbConnect;
 
 class Manager
 {
